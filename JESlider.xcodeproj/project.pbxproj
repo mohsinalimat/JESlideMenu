@@ -13,6 +13,7 @@
 		DD80502E1B0CECF200DC153D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD80502D1B0CECF200DC153D /* Images.xcassets */; };
 		DD8050311B0CECF300DC153D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD80502F1B0CECF300DC153D /* LaunchScreen.xib */; };
 		DD80503D1B0CECF300DC153D /* JESliderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD80503C1B0CECF300DC153D /* JESliderTests.swift */; };
+		DD8050471B0CEE4F00DC153D /* JEContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8050461B0CEE4F00DC153D /* JEContainerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		DD8050361B0CECF300DC153D /* JESliderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JESliderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD80503B1B0CECF300DC153D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD80503C1B0CECF300DC153D /* JESliderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESliderTests.swift; sourceTree = "<group>"; };
+		DD8050461B0CEE4F00DC153D /* JEContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JEContainerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				DD8050261B0CECF200DC153D /* AppDelegate.swift */,
 				DD8050281B0CECF200DC153D /* ViewController.swift */,
+				DD8050461B0CEE4F00DC153D /* JEContainerViewController.swift */,
 				DD80502A1B0CECF200DC153D /* Main.storyboard */,
 				DD80502D1B0CECF200DC153D /* Images.xcassets */,
 				DD80502F1B0CECF300DC153D /* LaunchScreen.xib */,
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD8050291B0CECF200DC153D /* ViewController.swift in Sources */,
+				DD8050471B0CEE4F00DC153D /* JEContainerViewController.swift in Sources */,
 				DD8050271B0CECF200DC153D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
