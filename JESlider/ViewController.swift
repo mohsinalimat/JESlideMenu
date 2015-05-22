@@ -20,12 +20,12 @@ class ViewController: UIViewController {
         self.view.addSubview(self.scrollView)
         
         let views = ["scrollView": self.scrollView]
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView]-60-|", options: nil, metrics: nil, views: views))
+        let metrics = ["width": 260.0]
+
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView(width)]", options: nil, metrics: metrics, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[scrollView]|", options: nil, metrics: nil, views: views))
         
         self.scrollView.setConstraints()
-        //self.scrollView.setContentOffset(CGPoint(x: self.view.bounds.width, y: 0), animated: false)
-        
     }
 
     override func didReceiveMemoryWarning() {
