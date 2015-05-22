@@ -136,4 +136,82 @@ class JEContainerViewControllerSegue: UIStoryboardSegue
 }
 
 
+class JENavDrawerScrollView: UIScrollView
+{
+    var containerView = UIView()
+    
+    required init(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+        self.setup()
+    }
+    
+    override init(frame: CGRect)
+    {
+        super.init(frame: frame)
+        self.setup()
+    }
+    
+    func setup()
+    {
+        self.backgroundColor = UIColor.clearColor()
+        self.showsHorizontalScrollIndicator = false
+        self.showsVerticalScrollIndicator = false
+        self.pagingEnabled = true
+    }
+    
+    func setConstraints()
+    {
+        // defines the content size of the scrollView
+        let contentView = UIView()
+        contentView.backgroundColor = UIColor.clearColor()
+        contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(contentView)
+        
+        // containerView for the menu
+        self.setTranslatesAutoresizingMaskIntoConstraints(false)
+        containerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        containerView.backgroundColor = UIColor.darkGrayColor()
+        contentView.addSubview(containerView)
+        
+        let superview = contentView.superview!
+        let views = ["content": contentView, "container": containerView, "superview": superview]
+        let metrics = ["left": -60.0]
+        
+        // constraints for contentView
+        // equal height to superview
+        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "V:|[content(==superview)]|",
+            options: nil,
+            metrics: nil,
+            views: views))
+        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "H:|[content]|",
+            options: nil,
+            metrics: nil,
+            views: views))
+        
+        // twice the width of superview
+        self.addConstraint(NSLayoutConstraint(
+            item: contentView,
+            attribute: NSLayoutAttribute.Width,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: contentView.superview,
+            attribute: NSLayoutAttribute.Width,
+            multiplier: 2.0,
+            constant: 0))
+
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[container]|", options: nil, metrics: nil, views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(left)-[container]", options: nil, metrics: metrics, views: views))
+        self.addConstraint(NSLayoutConstraint(item: containerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: superview, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0.0))
+        
+    }
+}
+
+
+
+
+
+
+
 
