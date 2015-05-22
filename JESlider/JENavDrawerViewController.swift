@@ -140,6 +140,7 @@ class JENavDrawerScrollView: UIScrollView
 {
     var containerView = UIView()
     
+    
     required init(coder aDecoder: NSCoder)
     {
         super.init(coder: aDecoder)
@@ -162,18 +163,20 @@ class JENavDrawerScrollView: UIScrollView
     
     func setConstraints()
     {
-        // defines the content size of the scrollView
+        // the contentView defines the content size
+        // of the scrollView
         let contentView = UIView()
         contentView.backgroundColor = UIColor.clearColor()
         contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.addSubview(contentView)
         
-        // containerView for the menu
-        self.setTranslatesAutoresizingMaskIntoConstraints(false)
+        // containerView will later contain the
+        // drawer menu
         containerView.setTranslatesAutoresizingMaskIntoConstraints(false)
         containerView.backgroundColor = UIColor.darkGrayColor()
         contentView.addSubview(containerView)
         
+        // superview is self == scrollView
         let superview = contentView.superview!
         let views = ["content": contentView, "container": containerView, "superview": superview]
         let metrics = ["left": -60.0]
@@ -196,15 +199,34 @@ class JENavDrawerScrollView: UIScrollView
             item: contentView,
             attribute: NSLayoutAttribute.Width,
             relatedBy: NSLayoutRelation.Equal,
-            toItem: contentView.superview,
+            toItem: self,
             attribute: NSLayoutAttribute.Width,
             multiplier: 2.0,
             constant: 0))
-
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[container]|", options: nil, metrics: nil, views: views))
-        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(left)-[container]", options: nil, metrics: metrics, views: views))
-        self.addConstraint(NSLayoutConstraint(item: containerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: superview, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0.0))
         
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "V:|[container]|",
+            options: nil,
+            metrics: nil,
+            views: views))
+        contentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
+            "H:|[container]",
+            options: nil,
+            metrics: metrics,
+            views: views))
+        self.addConstraint(NSLayoutConstraint(
+            item: containerView,
+            attribute: NSLayoutAttribute.Width,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: self,
+            attribute: NSLayoutAttribute.Width,
+            multiplier: 1.0,
+            constant: 0.0))
+    }
+    
+    func hideDrawer()
+    {
+        self.setContentOffset(CGPoint(x: self.bounds.width, y: 0), animated: false)
     }
 }
 
