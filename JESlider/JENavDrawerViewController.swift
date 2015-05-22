@@ -35,8 +35,7 @@ class JENavDrawerViewController: UIViewController
     var frontContainerView: UIView!
     var leftContainerView: UIView!
     
-    var tapGestureRecognizer: UITapGestureRecognizer!
-    var panGestureRecognizer: UIPanGestureRecognizer!
+    var scrollView: UIScrollView!
     
     override func viewDidLoad()
     {
@@ -48,6 +47,18 @@ class JENavDrawerViewController: UIViewController
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setup()
+    {
+        self.scrollView = UIScrollView()
+        self.scrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.view.addSubview(self.scrollView)
+        
+        let views = ["view": self.scrollView]
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: nil, metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: views))
+        
     }
     
     
@@ -123,3 +134,6 @@ class JEContainerViewControllerSegue: UIStoryboardSegue
         
     }
 }
+
+
+

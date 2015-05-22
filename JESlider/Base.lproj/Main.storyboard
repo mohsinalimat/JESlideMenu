@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="JESlider" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +16,59 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iOS-7-Wallpaper-Parallax-86" translatesAutoresizingMaskIntoConstraints="NO" id="WSC-2O-1z1">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gbe-Ed-TVe">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pt9-PR-6f9">
+                                        <rect key="frame" x="0.0" y="0.0" width="1200" height="600"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYk-qj-eRs">
+                                                <rect key="frame" x="-60" y="0.0" width="600" height="600"/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="SYk-qj-eRs" secondAttribute="bottom" id="b34-dk-fTa"/>
+                                            <constraint firstItem="SYk-qj-eRs" firstAttribute="top" secondItem="Pt9-PR-6f9" secondAttribute="top" id="bi1-gw-vUc"/>
+                                            <constraint firstItem="SYk-qj-eRs" firstAttribute="leading" secondItem="Pt9-PR-6f9" secondAttribute="leading" constant="-60" id="wcQ-je-wL7"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Pt9-PR-6f9" firstAttribute="leading" secondItem="gbe-Ed-TVe" secondAttribute="leading" id="32t-oO-t8n"/>
+                                    <constraint firstAttribute="bottom" secondItem="Pt9-PR-6f9" secondAttribute="bottom" id="70r-ud-Zxn"/>
+                                    <constraint firstItem="Pt9-PR-6f9" firstAttribute="top" secondItem="gbe-Ed-TVe" secondAttribute="top" id="SPz-Xc-Cio"/>
+                                    <constraint firstAttribute="trailing" secondItem="Pt9-PR-6f9" secondAttribute="trailing" id="d5N-Cz-2kT"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="WSC-2O-1z1" secondAttribute="trailing" id="BRG-8c-ggT"/>
+                            <constraint firstAttribute="width" secondItem="SYk-qj-eRs" secondAttribute="width" id="C12-BU-yaj"/>
+                            <constraint firstAttribute="trailing" secondItem="gbe-Ed-TVe" secondAttribute="trailing" id="F85-6g-u2W"/>
+                            <constraint firstItem="WSC-2O-1z1" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="InC-Aj-yvY"/>
+                            <constraint firstItem="Pt9-PR-6f9" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="2" id="MZb-z2-RiF"/>
+                            <constraint firstItem="gbe-Ed-TVe" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="RoU-E0-0aP"/>
+                            <constraint firstItem="gbe-Ed-TVe" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="S3O-3b-8xz"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="WSC-2O-1z1" secondAttribute="bottom" id="VhP-ae-trl"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="gbe-Ed-TVe" secondAttribute="bottom" id="Y7H-vH-kBa"/>
+                            <constraint firstItem="Pt9-PR-6f9" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="mtr-c2-HlI"/>
+                            <constraint firstItem="WSC-2O-1z1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="o1s-r7-uZR"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="iOS-7-Wallpaper-Parallax-86" width="520" height="763"/>
+    </resources>
 </document>
