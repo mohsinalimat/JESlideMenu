@@ -26,6 +26,9 @@ class JENavDrawerChildViewController: UIViewController
 
 class JENavDrawerViewController: UIViewController
 {
+    @IBInspectable var contentViewStoryboardID: String?
+    @IBInspectable var menuViewStoryboardID: String?
+    
     // in front is the main ViewController
     var frontViewController: UIViewController!
     
@@ -170,7 +173,6 @@ class JENavDrawerViewController: UIViewController
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
     {
-        
         if segue.identifier == "je_nav"
         {
             if let des = segue.destinationViewController as? UIViewController
@@ -238,7 +240,7 @@ class JENavDrawerScrollView: UIScrollView
         self.decelerationRate = UIScrollViewDecelerationRateFast
         
         // dark visualEffectView
-        self.containerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+        self.containerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
         
         // drop shadow
         self.containerView.layer.shadowColor = UIColor.blackColor().CGColor
@@ -331,18 +333,241 @@ class JENavDrawerScrollView: UIScrollView
     }
 }
 
-/*
-class JENavDrawerTableViewController: UITableViewController
+
+class JENavDrawerMenuViewController: UIViewController
 {
-    //
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        return 0
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .None
+        tableView.frame = CGRectMake(20, (self.view.frame.size.height - 54 * 5) / 2.0, self.view.frame.size.width, 54 * 5)
+        tableView.autoresizingMask = .FlexibleTopMargin | .FlexibleBottomMargin | .FlexibleWidth
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.opaque = false
+        tableView.backgroundColor = UIColor.clearColor()
+        tableView.backgroundView = nil
+        tableView.bounces = false
+        return tableView
+        }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = UIColor.clearColor()
+        view.addSubview(tableView)
+        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 }
-*/
+
+extension JENavDrawerMenuViewController: UITableViewDataSource, UITableViewDelegate
+{
+    //
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return 3
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    {
+        return 54
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
+        let titles = ["Home", "Categories", "Dict"]
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
+        cell.backgroundColor = UIColor.clearColor()
+        cell.textLabel?.text = titles[indexPath.row]
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 21)
+        
+        return cell
+    }
+}
 
 
+extension UIViewController
+{
+    var sideMenuViewController: JESideMenuViewController? {
+        get {
+            //return getSideViewController(self)
+            return nil
+        }
+    }
+    
+    private func getSideViewController(viewController: UIViewController) -> JESideMenuViewController? {
+        if let parent = viewController.parentViewController {
+            if parent is JESideMenuViewController {
+                return parent as? JESideMenuViewController
+            }else {
+                //return getSideViewController(parent)
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    @IBAction func presentLeftMenuViewController() {
+        
+        //sideMenuViewController?._presentLeftMenuViewController()
+        
+    }
+}
+
+class JESideMenuViewController: UIViewController
+{
+    @IBInspectable var contentViewStoryboardID: String?
+    @IBInspectable var menuViewStoryboardID: String?
+    
+    // in front is the main ViewController
+    var contentViewController: UIViewController? {
+        willSet {
+            setupContentViewController(newValue, inView: contentView)
+        }
+        didSet {
+            if let controller = oldValue
+            {
+                hideContentController(controller)
+            }
+        }
+    }
+    
+    // slider menu ViewController on the left
+    var menuViewController: UIViewController? {
+        willSet {
+            setupMenuViewController(newValue, inView: menuView)
+        }
+    }
+    
+    required init(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+    }
+    
+    var contentView: UIView!
+    var menuView: UIVisualEffectView!
+    
+    var scrollView: JENavDrawerScrollView!
+    
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        
+        // configures the views
+        // sets the constraints
+        self.setup()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func setup()
+    {
+        // frontContainerView is the main view for the content
+        self.contentView = UIView()
+        self.contentView.backgroundColor = UIColor.clearColor()
+        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.view.addSubview(self.contentView)
+        
+        // setup the constraints
+        // the frontView fills the screen
+        let view = ["view": self.contentView]
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: nil, metrics: nil, views: view))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: view))
+        
+        
+        // navigation drawer scrollView
+        self.scrollView = JENavDrawerScrollView()
+        self.scrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.view.addSubview(self.scrollView)
+        
+        // get the reference for the containerView
+        self.menuView = self.scrollView.containerView
+        
+        // set the constraints on the scrollView
+        let views = ["scrollView": self.scrollView]
+        
+        // reasonable width for iPhone 5/6 & iPad
+        let metrics = ["width": 260.0]
+        
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView(width)]", options: nil, metrics: metrics, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[scrollView]|", options: nil, metrics: nil, views: views))
+        
+        // set the constraints within the scrollView
+        self.scrollView.setConstraints()
+        
+        //
+        // Init Viewcontroller
+        //
+        if let contentID = self.contentViewStoryboardID
+        {
+            self.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(contentID) as? UIViewController
+        }
+        
+        if let menuID = self.menuViewStoryboardID
+        {
+            self.menuViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(menuID) as? UIViewController
+        }
+    }
+    
+    // MARK: Container ViewController
+    
+    // add the first content to the container
+    func setupContentViewController(contentController: UIViewController?, inView view: UIView)
+    {
+        if let content = contentController
+        {
+            self.addChildViewController(content)
+            content.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+            view.addSubview(content.view)
+            content.didMoveToParentViewController(self)
+            
+            let views = ["view": content.view]
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: nil, metrics: nil, views: views))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: views))
+        }
+    }
+    
+    // add the Menu to the visualEffectsView
+    func setupMenuViewController(menuController: UIViewController?, inView view: UIVisualEffectView)
+    {
+        if let menu = menuController
+        {
+            self.addChildViewController(menu)
+            menu.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+            view.contentView.addSubview(menu.view)
+            menu.didMoveToParentViewController(self)
+            
+            let views = ["view": menu.view]
+            let metrics = ["left": 60]
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-left-[view]|", options: nil, metrics: metrics, views: views))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: views))
+        }
+    }
+    
+    
+    // remove the content from container
+    func hideContentController(content: UIViewController)
+    {
+        content.willMoveToParentViewController(nil)
+        content.view.removeFromSuperview()
+        content.removeFromParentViewController()
+    }
+    
+    override func viewDidLayoutSubviews()
+    {
+        self.scrollView.setContentOffset(CGPoint(x: self.view.bounds.width, y: 0), animated: false)
+    }
+
+}
 
 
 
