@@ -320,7 +320,6 @@ class JENavDrawerScrollView: UIScrollView
             multiplier: 1.0,
             constant: 60.0))
     }
-
     
     func showDrawer()
     {
@@ -367,8 +366,6 @@ class JENavDrawerMenuViewController: UIViewController
 
 extension JENavDrawerMenuViewController: UITableViewDataSource, UITableViewDelegate
 {
-    //
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return 3
@@ -388,6 +385,19 @@ extension JENavDrawerMenuViewController: UITableViewDataSource, UITableViewDeleg
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 21)
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        switch indexPath.row
+        {
+        case 0: print()
+            sideMenuViewController?.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("Home") as? UIViewController
+        case 1: print()
+        default: print()
+        }
     }
 }
 
