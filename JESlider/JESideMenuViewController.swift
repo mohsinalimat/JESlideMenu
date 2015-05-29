@@ -29,15 +29,14 @@ extension UIViewController
     }
     
     //MARK: - To Do toggle
-    @IBAction func showLeftMenuViewController() {
-        
-        //sideMenuViewController?._presentLeftMenuViewController()
-        
+    @IBAction func showLeftMenuViewController()
+    {
+        sideMenuViewController?.showMenu()
     }
     
     func hideLeftMenuViewController()
     {
-        //
+        self.sideMenuViewController?.hideMenu()
     }
 }
 
@@ -52,6 +51,7 @@ class JESideMenuViewController: UIViewController
     var menuView: UIVisualEffectView!
     var scrollView: JESideMenuScrollView!
     var blurStyle: UIBlurEffectStyle = .Light
+    var isFirstStart: Bool = true
     
     // in front is the main ViewController
     // adds the contentViewController as a child
@@ -95,7 +95,9 @@ class JESideMenuViewController: UIViewController
     
     func setup()
     {
-        // load menu and blurStyle
+        // init the menu
+        // get the the blurStyle for the UIVisualEffectsView
+        // in the scrollView
         var menuVC: JELeftSideMenuViewController?
         if let menuID = self.menuViewStoryboardID,
             menuViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(menuID) as? JELeftSideMenuViewController
@@ -146,14 +148,15 @@ class JESideMenuViewController: UIViewController
             self.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(contentID) as? UIViewController
         }
         
-        // actually set menu
+        // set the menu after
+        // scrollView has been setup
         if let menu = menuVC
         {
             self.menuViewController = menu
         }
     }
     
-    // MARK: Container ViewController
+    // MARK: - Container ViewController for the Content
     
     // add the first content to the container
     func setupContentViewController(contentController: UIViewController?, inView view: UIView)
@@ -162,12 +165,37 @@ class JESideMenuViewController: UIViewController
         {
             self.addChildViewController(content)
             content.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+            content.view.alpha = 0.0
             view.addSubview(content.view)
             content.didMoveToParentViewController(self)
             
+            // fullscreen
             let views = ["view": content.view]
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: nil, metrics: nil, views: views))
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: views))
+            view.addConstraints(
+                NSLayoutConstraint.constraintsWithVisualFormat(
+                    "H:|[view]|",
+                    options: nil,
+                    metrics: nil,
+                    views: views
+                ))
+            view.addConstraints(
+                NSLayoutConstraint.constraintsWithVisualFormat(
+                    "V:|[view]|",
+                    options: nil,
+                    metrics: nil,
+                    views: views
+                ))
+            
+            // animation
+            UIView.animateWithDuration(
+                0.25,
+                delay: 0.0,
+                options: .CurveEaseInOut,
+                animations: {
+                    content.view.alpha = 1.0
+                },
+                completion: nil
+            )
         }
     }
     
@@ -197,10 +225,24 @@ class JESideMenuViewController: UIViewController
         content.removeFromParentViewController()
     }
     
+    func showMenu()
+    {
+        self.scrollView.showMenu()
+    }
+    
+    func hideMenu()
+    {
+        self.scrollView.hideMenu()
+    }
+    
     // hide the menu on start and when rotated
     override func viewDidLayoutSubviews()
     {
-        self.scrollView.setContentOffset(CGPoint(x: self.view.bounds.width, y: 0), animated: false)
+        if isFirstStart
+        {
+            self.scrollView.setContentOffset(CGPoint(x: self.view.bounds.width, y: 0), animated: false)
+            self.isFirstStart = false
+        }
     }
 }
 
@@ -342,12 +384,12 @@ class JESideMenuScrollView: UIScrollView
     }
     */
     
-    func showDrawer()
+    func showMenu()
     {
         self.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
     }
     
-    func hideDrawer()
+    func hideMenu()
     {
         self.setContentOffset(CGPoint(x: self.bounds.width, y: 0), animated: true)
     }
@@ -360,6 +402,8 @@ class JELeftSideMenuViewController: UIViewController
 {
     @IBInspectable var lightMenu: Bool = true
     
+    // Please note:
+    // menuPoints == storyboardIDs
     @IBInspectable var menuPoint1: String?
     @IBInspectable var menuPoint2: String?
     @IBInspectable var menuPoint3: String?
@@ -367,6 +411,7 @@ class JELeftSideMenuViewController: UIViewController
     @IBInspectable var menuPoint5: String?
     @IBInspectable var menuPoint6: String?
     
+    //MARK: - Insert your menu points here:
     var titles = [String]()
     
     lazy var tableView: UITableView = {
@@ -407,6 +452,7 @@ extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelega
         // enter your menuPoints in the storyboard
         // or directly in code
         // fill the titles array above with your menu points
+        // the storyboardIDs must be equal to the menu points!
         if self.titles.count == 0
         {
             var menuPoints = [menuPoint1, menuPoint2, menuPoint3, menuPoint4, menuPoint5, menuPoint6]
@@ -453,7 +499,9 @@ extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelega
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         // Please note:
-        // The titles/menu points should be the same as the StoryboardIDs!
+        // The titles/menu points must be the same as the StoryboardIDs!
+        // this will raise an exception if your menu points aren't equal to your StoryboardIDs
+        sideMenuViewController?.hideMenu()
         sideMenuViewController?.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(self.titles[indexPath.row]) as? UIViewController
     }
 }
