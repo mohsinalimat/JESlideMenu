@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <scenes>
-        <!--Nav Drawer View Controller-->
+        <!--Side Menu View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="JENavDrawerViewController" customModule="JESlider" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="JESideMenuViewController" customModule="JESlider" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -17,19 +17,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <connections>
-                        <segue destination="HAv-HP-NBH" kind="custom" identifier="je_start" customClass="JEContainerViewControllerSegue" customModule="JESlider" customModuleProvider="target" id="Zyp-3V-Jkf"/>
-                        <segue destination="Cgn-Ht-DAR" kind="custom" identifier="je_nav" customClass="JEContainerViewControllerSegue" customModule="JESlider" customModuleProvider="target" id="Rqt-gh-w3G"/>
-                    </connections>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="contentViewStoryboardID" value="Home"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="menuViewStoryboardID" value="Menu"/>
+                    </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="491" y="454"/>
         </scene>
-        <!--Nav Drawer Menu View Controller-->
+        <!--Left Side Menu View Controller-->
         <scene sceneID="Lpt-3W-QOz">
             <objects>
-                <viewController id="Cgn-Ht-DAR" customClass="JENavDrawerMenuViewController" customModule="JESlider" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Menu" id="Cgn-Ht-DAR" customClass="JELeftSideMenuViewController" customModule="JESlider" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fna-fV-Qfm"/>
                         <viewControllerLayoutGuide type="bottom" id="Gve-Ex-DMM"/>
@@ -39,15 +39,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="menuPoint1" value="Home"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="menuPoint2" value="Category"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="lightMenu" value="NO"/>
+                    </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EKG-NA-SUc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="454"/>
+            <point key="canvasLocation" x="491" y="1194"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ih5-qe-8Tp">
             <objects>
-                <viewController id="HAv-HP-NBH" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Home" id="HAv-HP-NBH" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6gv-U8-WRD"/>
                         <viewControllerLayoutGuide type="bottom" id="bQW-MY-jNk"/>
@@ -59,8 +64,8 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iOS-7-Wallpaper-Parallax-86" translatesAutoresizingMaskIntoConstraints="NO" id="jec-yy-R8Y">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start! :D" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8EQ-jW-odd">
-                                <rect key="frame" x="253" y="285" width="94" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home :D" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8EQ-jW-odd">
+                                <rect key="frame" x="250" y="285" width="100" height="30"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -79,7 +84,37 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YiU-TB-4wu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2085" y="-292"/>
+            <point key="canvasLocation" x="1205" y="454"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="cLy-cx-IiI">
+            <objects>
+                <viewController storyboardIdentifier="Category" id="u9a-NS-TMO" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="WAW-4c-lh8"/>
+                        <viewControllerLayoutGuide type="bottom" id="E32-qa-hEm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="mbw-B9-dUB">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categories! :D" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vDX-yp-6pU">
+                                <rect key="frame" x="245" y="289" width="110" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="vDX-yp-6pU" secondAttribute="centerX" id="ggB-9s-JeC"/>
+                            <constraint firstAttribute="centerY" secondItem="vDX-yp-6pU" secondAttribute="centerY" constant="0.5" id="sGR-gE-5mI"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pg3-4Z-6hQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1205" y="1194"/>
         </scene>
     </scenes>
     <resources>

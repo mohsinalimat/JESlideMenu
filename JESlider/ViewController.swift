@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var scrollView = JENavDrawerScrollView()
+    var scrollView = JESideMenuScrollView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
