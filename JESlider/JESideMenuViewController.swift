@@ -38,6 +38,11 @@ extension UIViewController
     {
         self.sideMenuViewController?.hideMenu()
     }
+    
+    @IBAction func toggleMenu()
+    {
+        self.sideMenuViewController?._toggleMenu()
+    }
 }
 
 
@@ -52,6 +57,8 @@ class JESideMenuViewController: UIViewController
     var scrollView: JESideMenuScrollView!
     var blurStyle: UIBlurEffectStyle = .Light
     var isFirstStart: Bool = true
+    
+    var edgeGestureRecoginzer: UIScreenEdgePanGestureRecognizer!
     
     // in front is the main ViewController
     // adds the contentViewController as a child
@@ -112,12 +119,6 @@ class JESideMenuViewController: UIViewController
         self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.view.addSubview(self.contentView)
         
-        // setup the constraints
-        // the contentView fills whole the screen
-        let view = ["view": self.contentView]
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: nil, metrics: nil, views: view))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: view))
-        
         // navigation drawer scrollView
         // side menu
         self.scrollView = JESideMenuScrollView()
@@ -128,17 +129,31 @@ class JESideMenuViewController: UIViewController
         // get the reference for the containerView
         self.menuView = self.scrollView.containerView
         
-        // set the constraints on the scrollView
-        let views = ["scrollView": self.scrollView]
+        // setup the constraints
+        // the contentView fills whole the screen
+        let views = ["contentView": self.contentView, "scrollView": self.scrollView]
         
         // reasonable width for iPhone 5/6 & iPad
         let metrics = ["width": 260.0]
+        
+        //
+        // TODO add constraints for navbar
+        //
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView]|", options: nil, metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView]|", options: nil, metrics: nil, views: views))
         
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView(width)]", options: nil, metrics: metrics, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[scrollView]|", options: nil, metrics: nil, views: views))
         
         // set the constraints within the scrollView
         self.scrollView.setConstraints()
+        
+        //
+        // Pan Gestures
+        //
+        // move pan gesture recognizer to menuView/visualEffectView
+        self.menuView.addGestureRecognizer(self.scrollView.panGestureRecognizer)
+
         
         //
         // init Content
@@ -163,6 +178,7 @@ class JESideMenuViewController: UIViewController
     {
         if let content = contentController
         {
+            // add child viewController
             self.addChildViewController(content)
             content.view.setTranslatesAutoresizingMaskIntoConstraints(false)
             content.view.alpha = 0.0
@@ -186,7 +202,7 @@ class JESideMenuViewController: UIViewController
                     views: views
                 ))
             
-            // animation
+            // fade in animation
             UIView.animateWithDuration(
                 0.25,
                 delay: 0.0,
@@ -235,6 +251,12 @@ class JESideMenuViewController: UIViewController
         self.scrollView.hideMenu()
     }
     
+    // Toggle
+    func _toggleMenu()
+    {
+        self.scrollView.toggleMenu()
+    }
+    
     // hide the menu on start and when rotated
     override func viewDidLayoutSubviews()
     {
@@ -250,14 +272,15 @@ class JESideMenuViewController: UIViewController
 
 class JESideMenuScrollView: UIScrollView
 {
-    var containerView: UIVisualEffectView!
+    var contentView = UIView()
+    var containerView = UIVisualEffectView()
     var blurStyle: UIBlurEffectStyle = .Light {
         willSet {
             self.containerView = UIVisualEffectView(effect: UIBlurEffect(style: newValue))
             
             // drop shadow
             self.containerView.layer.shadowColor = UIColor.blackColor().CGColor
-            self.containerView.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+            self.containerView.layer.shadowOffset = CGSize(width: 1.0, height: 4.0)
             self.containerView.layer.shadowOpacity = 0.5
             self.containerView.layer.shadowRadius = 4.0
         }
@@ -291,20 +314,19 @@ class JESideMenuScrollView: UIScrollView
         self.blurStyle = .Light
     }
     
-    // configure the constraints
+    // configure contentView, container/visualEffectView & constraints
     func setConstraints()
     {
         // the contentView defines the content size
         // of the scrollView
-        let contentView = UIView()
-        contentView.backgroundColor = UIColor.clearColor()
-        contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.addSubview(contentView)
+        self.contentView.backgroundColor = UIColor.clearColor()
+        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(self.contentView)
         
         // containerView will later contain the
         // drawer menu
-        containerView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        contentView.addSubview(containerView)
+        self.containerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.contentView.addSubview(containerView)
         
         // superview is self == scrollView
         // scrollview is 60 pt smaller/narrower than screen
@@ -377,12 +399,19 @@ class JESideMenuScrollView: UIScrollView
             ))
     }
     
-    /*
+
+    // Hittest
     override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView?
     {
-    // To Do
+        let hitview = super.hitTest(point, withEvent: event)
+        
+        if hitview == self.contentView
+        {
+            return nil
+        }
+        return hitview
     }
-    */
+
     
     func showMenu()
     {
@@ -392,6 +421,18 @@ class JESideMenuScrollView: UIScrollView
     func hideMenu()
     {
         self.setContentOffset(CGPoint(x: self.bounds.width, y: 0), animated: true)
+    }
+    
+    func toggleMenu()
+    {
+        if self.contentOffset.x > 0
+        {
+            self.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
+        }
+        else
+        {
+            self.setContentOffset(CGPoint(x: self.bounds.width, y: 0), animated: true)
+        }
     }
 }
 
@@ -412,6 +453,7 @@ class JELeftSideMenuViewController: UIViewController
     @IBInspectable var menuPoint6: String?
     
     //MARK: - Insert your menu points here:
+    // if you don't insert them via the storyboard
     var titles = [String]()
     
     lazy var tableView: UITableView = {

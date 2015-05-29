@@ -49,7 +49,7 @@
             </objects>
             <point key="canvasLocation" x="491" y="1194"/>
         </scene>
-        <!--View Controller-->
+        <!--Home-->
         <scene sceneID="ih5-qe-8Tp">
             <objects>
                 <viewController id="HAv-HP-NBH" sceneMemberID="viewController">
@@ -81,7 +81,13 @@
                             <constraint firstAttribute="trailing" secondItem="jec-yy-R8Y" secondAttribute="trailing" id="zhF-k8-lkJ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Ons-1Z-429"/>
+                    <navigationItem key="navigationItem" title="Home" id="Ons-1Z-429">
+                        <barButtonItem key="leftBarButtonItem" title="Toggle" id="l7v-qZ-U3f">
+                            <connections>
+                                <action selector="toggleMenu" destination="HAv-HP-NBH" id="Qm8-1X-GrQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YiU-TB-4wu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
