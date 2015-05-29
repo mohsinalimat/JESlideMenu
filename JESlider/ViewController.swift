@@ -40,3 +40,27 @@ class ViewController: UIViewController {
     }
 }
 
+
+class TestTableViewController: UITableViewController
+{
+    let titles = ["Eins", "Zwei", "Drei", "Vier", "Fünf", "Sechs", "Sieben", "Acht", "Neun"]
+    
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+    }
+    
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return self.titles.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
+        cell.textLabel?.text = self.titles[indexPath.row]
+        
+        return cell
+    }
+}
