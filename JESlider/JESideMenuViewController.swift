@@ -8,6 +8,7 @@
 
 import UIKit
 
+//MARK: - Extension for Toggle Button
 extension UIViewController
 {
     var sideMenuViewController: JESideMenuViewController? {
@@ -17,18 +18,20 @@ extension UIViewController
     }
     
     // find recursively the SideMenuViewController
-    private func getSideViewController(viewController: UIViewController) -> JESideMenuViewController? {
-        if let parent = viewController.parentViewController {
-            if parent is JESideMenuViewController {
-                return parent as? JESideMenuViewController
-            }else {
-                return getSideViewController(parent)
+    private func getSideViewController(viewController: UIViewController) -> JESideMenuViewController?
+    {
+        if let parent = viewController.parentViewController
+        {
+            if let controller = parent as? JESideMenuViewController
+            {
+                return controller
             }
+            return getSideViewController(parent)
         }
         return nil
     }
     
-    //MARK: - Toggle
+    //MARK: - Toggle Button Action
     @IBAction func toggleMenu()
     {
         self.sideMenuViewController?._toggleMenu()
@@ -36,8 +39,8 @@ extension UIViewController
 }
 
 
-// New Main Class
-class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
+// MARK: - Menu Controller
+class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, UIScrollViewDelegate
 {
     @IBInspectable var contentViewStoryboardID: String?
     @IBInspectable var menuViewStoryboardID: String?
@@ -92,6 +95,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: - Initial Setup
     func setup()
     {
         // init the menu
@@ -140,6 +144,9 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
         // set the constraints within the scrollView
         self.scrollView.setConstraints()
         
+        // set delegate
+        self.scrollView.delegate = self
+        
         //
         // Pan Gesture
         //
@@ -167,7 +174,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
         }
     }
     
-    // MARK: - Container ViewController for the Content
+    // MARK: - Container ViewController Methods
     
     // add the first content to the container
     func setupContentViewController(contentController: UIViewController?, inView view: UIView)
@@ -244,7 +251,8 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
         self.scrollView.toggleMenu()
     }
     
-    // UIGestureRecognizerDelegate
+    
+    //MARK: - UIGestureRecognizer Delegate
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool
     {
@@ -262,9 +270,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
         
         if pan.state == UIGestureRecognizerState.Began
         {
-            //
-            //enable shadow
-            //
+            //self.scrollView.toggleDropShadow(false)
         }
         else if pan.state == UIGestureRecognizerState.Changed
         {
@@ -277,6 +283,28 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     
+    //MARK: - UIScrollViewDelegate
+    
+    func scrollViewDidScroll(scrollView: UIScrollView)
+    {
+        if scrollView.contentOffset.x <= 0.0
+        {
+            if let scroll = scrollView as? JESideMenuScrollView
+            {
+                scroll.toggleDropShadow(hide: false)
+            }
+        }
+        else if scrollView.contentOffset.x >= scrollView.bounds.width
+        {
+            //println("Hide! D:")
+            if let scroll = scrollView as? JESideMenuScrollView
+            {
+                scroll.toggleDropShadow(hide: true)
+            }
+        }
+    }
+    
+    //MARK: - viewDidLayoutSubviews, Hide Menu on Load
     // hide the menu on start and when rotated
     override func viewDidLayoutSubviews()
     {
@@ -289,11 +317,10 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate
     }
 }
 
-// MARK: - Navigation Drawer ScrollView
+// MARK: - Side Menu ScrollView
 
 class JESideMenuScrollView: UIScrollView
 {
-    var contentView = UIView()
     var containerView = UIVisualEffectView()
     var blurStyle: UIBlurEffectStyle = .Light {
         willSet {
@@ -302,7 +329,7 @@ class JESideMenuScrollView: UIScrollView
             // drop shadow
             self.containerView.layer.shadowColor = UIColor.blackColor().CGColor
             self.containerView.layer.shadowOffset = CGSize(width: 1.0, height: 4.0)
-            self.containerView.layer.shadowOpacity = 0.5
+            self.containerView.layer.shadowOpacity = 0.0
             self.containerView.layer.shadowRadius = 4.0
         }
     }
@@ -340,14 +367,15 @@ class JESideMenuScrollView: UIScrollView
     {
         // the contentView defines the content size
         // of the scrollView
-        self.contentView.backgroundColor = UIColor.clearColor()
-        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.addSubview(self.contentView)
+        var contentView = UIView()
+        contentView.backgroundColor = UIColor.clearColor()
+        contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(contentView)
         
         // containerView will later contain the
         // drawer menu
         self.containerView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.contentView.addSubview(containerView)
+        contentView.addSubview(containerView)
         
         // superview is self == scrollView
         // scrollview is 60 pt smaller/narrower than screen
@@ -426,7 +454,7 @@ class JESideMenuScrollView: UIScrollView
     {
         let hitview = super.hitTest(point, withEvent: event)
         
-        if hitview == self.contentView
+        if hitview == self.containerView.superview
         {
             return nil
         }
@@ -446,22 +474,20 @@ class JESideMenuScrollView: UIScrollView
         }
     }
     
-    
-    func toggleDropShadow(shouldHide:Bool)
+    func toggleDropShadow(hide shouldHide:Bool)
     {
+        var opacity: Float = shouldHide ? 0.0 : 0.5
         
-        if shouldHide
-        {
-            
-        }
+        self.containerView.layer.shadowOpacity = opacity
     }
 }
 
 
-
+// MARK: - Side Menu TableView Controller
 // The Left Side Menu
 class JELeftSideMenuViewController: UIViewController
 {
+    //MARK: IBInspectables
     @IBInspectable var lightMenu: Bool = true
     
     // Please note:
@@ -474,7 +500,7 @@ class JELeftSideMenuViewController: UIViewController
     @IBInspectable var menuPoint6: String?
     
     //MARK: - Insert your menu points here:
-    // if you don't insert them via the storyboard
+    //MARK: if you don't insert them via the storyboard
     var titles = [String]()
     
     lazy var tableView: UITableView = {
@@ -507,7 +533,8 @@ class JELeftSideMenuViewController: UIViewController
 }
 
 
-// TableView DataSource & Delegate
+//MARK: - JELeftSideMenu TableView DataSource/Delegate Extension
+
 extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelegate
 {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
