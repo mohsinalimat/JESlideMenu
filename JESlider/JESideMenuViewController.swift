@@ -499,9 +499,17 @@ class JELeftSideMenuViewController: UIViewController
     @IBInspectable var menuPoint5: String?
     @IBInspectable var menuPoint6: String?
     
+    @IBInspectable var menuIcon1: UIImage?
+    @IBInspectable var menuIcon2: UIImage?
+    @IBInspectable var menuIcon3: UIImage?
+    @IBInspectable var menuIcon4: UIImage?
+    @IBInspectable var menuIcon5: UIImage?
+    @IBInspectable var menuIcon6: UIImage?
+    
     //MARK: - Insert your menu points here:
     //MARK: if you don't insert them via the storyboard
     var titles = [String]()
+    var icons = [UIImage]()
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -521,28 +529,24 @@ class JELeftSideMenuViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.clearColor()
-        view.addSubview(tableView)
+        self.view.backgroundColor = UIColor.clearColor()
+        self.view.addSubview(tableView)
         
+        self.initTitles()
+        self.initIcons()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-}
-
-
-//MARK: - JELeftSideMenu TableView DataSource/Delegate Extension
-
-extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelegate
-{
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    
+    // enter your menuPoints in the storyboard
+    // or directly in code
+    // fill the titles array above with your menu points
+    // the storyboardIDs must be equal to the menu points!
+    func initTitles()
     {
-        // enter your menuPoints in the storyboard
-        // or directly in code
-        // fill the titles array above with your menu points
-        // the storyboardIDs must be equal to the menu points!
         if self.titles.count == 0
         {
             var menuPoints = [menuPoint1, menuPoint2, menuPoint3, menuPoint4, menuPoint5, menuPoint6]
@@ -555,7 +559,33 @@ extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelega
                 }
             }
         }
-        
+    }
+    
+    // choose your icons in the storyboard
+    func initIcons()
+    {
+        if self.icons.count == 0
+        {
+            var menuIcons = [menuIcon1, menuIcon2, menuIcon3, menuIcon4, menuIcon5, menuIcon6]
+            
+            for menuIcon in menuIcons
+            {
+                if let mi = menuIcon
+                {
+                    self.icons.append(mi)
+                }
+            }
+        }
+    }
+}
+
+
+//MARK: - JELeftSideMenu TableView DataSource/Delegate Extension
+
+extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelegate
+{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
         return self.titles.count
     }
     
@@ -571,6 +601,12 @@ extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelega
         cell.backgroundColor = UIColor.clearColor()
         cell.textLabel?.text = titles[indexPath.row]
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 21)
+        
+        // set image
+        if self.icons.count > indexPath.row
+        {
+            cell.imageView?.image = icons[indexPath.row]
+        }
         
         if lightMenu
         {
