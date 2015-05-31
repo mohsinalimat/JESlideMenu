@@ -124,6 +124,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         // side menu
         self.scrollView = JESideMenuScrollView()
         self.scrollView.blurStyle = self.blurStyle
+        self.scrollView.delegate = self
         self.scrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.view.addSubview(self.scrollView)
         
@@ -136,24 +137,15 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         // set the constraints within the scrollView
         self.scrollView.setConstraints()
         
-        
-        // set delegate
-        self.scrollView.delegate = self
-        
-        //
-        // Pan Gesture
-        //
+        // add Pan Gesture
         self.edgeGestureRecognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
         self.edgeGestureRecognizer.delegate = self
         self.view.addGestureRecognizer(self.edgeGestureRecognizer)
         
-        // move pan gesture recognizer to menuView/visualEffectView
+        // move pan gesture recognizer from scrollview to menuView/visualEffectView
         self.menuView.addGestureRecognizer(self.scrollView.panGestureRecognizer)
 
-        
-        //
         // init Content & add ChildViewController
-        //
         if let contentID = self.contentViewStoryboardID
         {
             self.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(contentID) as? UIViewController
@@ -302,8 +294,10 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
             view.contentView.addSubview(menu.view)
             menu.didMoveToParentViewController(self)
             
+            let top = self.hasNavigationbar ? 18 : 70
+            
             let views = ["view": menu.view]
-            let metrics = ["left": 60]
+            let metrics = ["top": top, "left": 66]
             view.addConstraints(
                 NSLayoutConstraint.constraintsWithVisualFormat(
                     "H:|-left-[view]|",
@@ -312,9 +306,9 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
                     views: views))
             view.addConstraints(
                 NSLayoutConstraint.constraintsWithVisualFormat(
-                    "V:|[view]|",
+                    "V:|-top-[view]|",
                     options: nil,
-                    metrics: nil,
+                    metrics: metrics,
                     views: views))
         }
     }
@@ -636,13 +630,12 @@ class JELeftSideMenuViewController: UIViewController
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .None
-        tableView.frame = CGRectMake(20, (self.view.frame.size.height - 54 * 5) / 2.0, self.view.frame.size.width, 54 * 5)
-        tableView.autoresizingMask = .FlexibleTopMargin | .FlexibleBottomMargin | .FlexibleWidth
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.opaque = false
         tableView.backgroundColor = UIColor.clearColor()
         tableView.backgroundView = nil
         tableView.bounces = false
+        tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
         return tableView
         }()
     
@@ -651,6 +644,9 @@ class JELeftSideMenuViewController: UIViewController
         
         self.view.backgroundColor = UIColor.clearColor()
         self.view.addSubview(tableView)
+        
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[tableView]|", options: nil, metrics: nil, views: ["tableView": self.tableView]))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[tableView]|", options: nil, metrics: nil, views: ["tableView": self.tableView]))
         
         self.initTitles()
         self.initIcons()

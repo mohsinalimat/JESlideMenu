@@ -20,6 +20,7 @@
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="contentViewStoryboardID" value="Home"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuViewStoryboardID" value="Menu"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasNavigationbar" value="NO"/>
                     </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
