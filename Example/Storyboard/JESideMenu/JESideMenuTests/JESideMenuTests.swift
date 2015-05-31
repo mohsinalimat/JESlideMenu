@@ -1,15 +1,15 @@
 //
-//  JESliderTests.swift
-//  JESliderTests
+//  JESideMenuTests.swift
+//  JESideMenuTests
 //
-//  Created by Jasmin on 20/05/15.
+//  Created by JE on 31.05.15.
 //  Copyright (c) 2015 JE. All rights reserved.
 //
 
 import UIKit
 import XCTest
 
-class JESliderTests: XCTestCase {
+class JESideMenuTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
