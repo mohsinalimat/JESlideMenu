@@ -44,12 +44,13 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
 {
     @IBInspectable var contentViewStoryboardID: String?
     @IBInspectable var menuViewStoryboardID: String?
-    @IBInspectable var hasNavigationbar: Bool = false
     
     var contentView: UIView!
     var menuView: UIVisualEffectView!
     var scrollView: JESideMenuScrollView!
+    var invisibleView: UIView!
     var blurStyle: UIBlurEffectStyle = .Light
+    var hasNavigationbar: Bool = false
     var isFirstStart: Bool = true
     let scrollViewWidth: CGFloat = 260.0
     
@@ -111,6 +112,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
             menuViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(menuID) as? JELeftSideMenuViewController
         {
             self.blurStyle = menuViewController.lightMenu ? .Light : .Dark
+            self.hasNavigationbar = menuViewController.hasNavigationbar
             menuVC = menuViewController
         }
         
@@ -119,6 +121,13 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         self.contentView.backgroundColor = UIColor.clearColor()
         self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.view.addSubview(self.contentView)
+        
+        // invisible view
+        self.invisibleView = UIView()
+        self.invisibleView.backgroundColor = UIColor.clearColor()
+        self.invisibleView.alpha = 0.0
+        self.invisibleView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.view.addSubview(self.invisibleView)
         
         // navigation drawer scrollView
         // side menu
@@ -142,6 +151,10 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         self.edgeGestureRecognizer.delegate = self
         self.view.addGestureRecognizer(self.edgeGestureRecognizer)
         
+        // add tap Gesture
+        self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapGestureRecognized:")
+        self.invisibleView.addGestureRecognizer(self.tapGestureRecognizer)
+        
         // move pan gesture recognizer from scrollview to menuView/visualEffectView
         self.menuView.addGestureRecognizer(self.scrollView.panGestureRecognizer)
 
@@ -163,7 +176,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
     {
         // setup the constraints
         // the contentView fills whole the screen
-        let views = ["contentView": self.contentView, "scrollView": self.scrollView]
+        let views = ["contentView": self.contentView, "scrollView": self.scrollView, "invisibleView": self.invisibleView]
         
         // reasonable width for iPhone 5/6 & iPad
         let metrics = ["width": self.scrollViewWidth]
@@ -172,6 +185,9 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         // contentView is full screen
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView]|", options: nil, metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView]|", options: nil, metrics: nil, views: views))
+        
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[invisibleView]|", options: nil, metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[invisibleView(==scrollView)]|", options: nil, metrics: nil, views: views))
         
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView(width)]", options: nil, metrics: metrics, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[scrollView]|", options: nil, metrics: nil, views: views))
@@ -361,6 +377,14 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         }
     }
     
+    func tapGestureRecognized(tap: UITapGestureRecognizer)
+    {
+        if self.scrollView.contentOffset.x <= 0.0
+        {
+            self.scrollView.toggleMenu()
+        }
+    }
+    
     
     //MARK: - UIScrollViewDelegate
     
@@ -374,6 +398,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
             if let scroll = scrollView as? JESideMenuScrollView
             {
                 scroll.toggleDropShadow(menuVisible: true)
+                self.invisibleView.alpha = 1.0
             }
         }
         else if scrollView.contentOffset.x >= scrollView.bounds.width
@@ -383,6 +408,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
             if let scroll = scrollView as? JESideMenuScrollView
             {
                 scroll.toggleDropShadow(menuVisible: false)
+                self.invisibleView.alpha = 0.0
             }
         }
     }
@@ -603,6 +629,7 @@ class JELeftSideMenuViewController: UIViewController
 {
     //MARK: IBInspectables
     @IBInspectable var lightMenu: Bool = true
+    @IBInspectable var hasNavigationbar: Bool = false
     
     // Please note:
     // menuPoints == storyboardIDs

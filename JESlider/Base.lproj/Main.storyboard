@@ -46,6 +46,7 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="menuPoint2" value="Category"/>
                         <userDefinedRuntimeAttribute type="image" keyPath="menuIcon1" value="home"/>
                         <userDefinedRuntimeAttribute type="image" keyPath="menuIcon2" value="menu"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasNavigationbar" value="NO"/>
                     </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EKG-NA-SUc" userLabel="First Responder" sceneMemberID="firstResponder"/>
