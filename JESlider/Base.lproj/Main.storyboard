@@ -40,9 +40,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="lightMenu" value="NO"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuPoint1" value="Home"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuPoint2" value="Category"/>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="lightMenu" value="NO"/>
                     </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EKG-NA-SUc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -71,6 +71,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="lBW-4j-OQV" kind="show" id="sGO-XO-jko"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -89,6 +92,36 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FKs-q5-YLX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2017" y="1194"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Lyl-Y1-1cb">
+            <objects>
+                <viewController id="lBW-4j-OQV" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OVH-Pb-Ot3"/>
+                        <viewControllerLayoutGuide type="bottom" id="iKM-wW-n7f"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qn1-dq-6rg">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tada! :D" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RNX-nX-Anm">
+                                <rect key="frame" x="269" y="289" width="63" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="RNX-nX-Anm" secondAttribute="centerX" id="88l-e0-vwH"/>
+                            <constraint firstAttribute="centerY" secondItem="RNX-nX-Anm" secondAttribute="centerY" constant="0.5" id="JFL-Qg-1Ma"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UYg-Ya-vav" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2746" y="1194"/>
         </scene>
         <!--Home-->
         <scene sceneID="ih5-qe-8Tp">

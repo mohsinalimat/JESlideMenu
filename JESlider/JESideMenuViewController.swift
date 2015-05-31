@@ -44,6 +44,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
 {
     @IBInspectable var contentViewStoryboardID: String?
     @IBInspectable var menuViewStoryboardID: String?
+    @IBInspectable var hasNavigationbar: Bool = true
     
     var contentView: UIView!
     var menuView: UIVisualEffectView!
@@ -54,6 +55,10 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
     
     var edgeGestureRecognizer: UIPanGestureRecognizer!
     var tapGestureRecognizer: UITapGestureRecognizer!
+    
+    var zeroTopConstraint: NSLayoutConstraint!
+    var landscapeTopConstraint: NSLayoutConstraint!
+    var portraitTopConstraint: NSLayoutConstraint!
     
     // in front is the main ViewController
     // adds the contentViewController as a child
@@ -132,14 +137,76 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         // reasonable width for iPhone 5/6 & iPad
         let metrics = ["width": self.scrollViewWidth]
         
-        //
-        // TODO add constraints for navbar
-        //
+        // add constraints
+        // contentView is full screen
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView]|", options: nil, metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView]|", options: nil, metrics: nil, views: views))
         
+
+        // top constraint for scrollView
+        // standard constraint
+        // side menu covers completely the screen
+        self.zeroTopConstraint = NSLayoutConstraint(
+            item: self.scrollView,
+            attribute: NSLayoutAttribute.Top,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: self.view,
+            attribute: NSLayoutAttribute.Top,
+            multiplier: 1.0,
+            constant: 0.0)
+        self.view.addConstraint(self.zeroTopConstraint)
+        self.zeroTopConstraint.active = false
+        
+        
+        // top constraint for portait
+        // if menu runs under navigationbar
+        self.portraitTopConstraint = NSLayoutConstraint(
+            item: self.scrollView,
+            attribute: NSLayoutAttribute.Top,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: self.view,
+            attribute: NSLayoutAttribute.Top,
+            multiplier: 1.0,
+            constant: 64.0)
+        self.view.addConstraint(self.portraitTopConstraint)
+        self.portraitTopConstraint.active = false
+        
+        
+        // top constraint for landscape
+        // changes for landscape
+        self.landscapeTopConstraint = NSLayoutConstraint(
+            item: self.scrollView,
+            attribute: NSLayoutAttribute.Top,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: self.view,
+            attribute: NSLayoutAttribute.Top,
+            multiplier: 1.0,
+            constant: 32.0)
+        self.view.addConstraint(self.landscapeTopConstraint)
+        self.landscapeTopConstraint.active = false
+        
+        //
+        // activate constraints
+        //
+        if self.hasNavigationbar
+        {
+            // iPhone landscape
+            if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact
+            {
+                self.landscapeTopConstraint.active = true
+            }
+            else
+            {
+                self.portraitTopConstraint.active = true
+            }
+        }
+        else
+        {
+            self.zeroTopConstraint.active = true
+        }
+        
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView(width)]", options: nil, metrics: metrics, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[scrollView]|", options: nil, metrics: nil, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[scrollView]|", options: nil, metrics: nil, views: views))
         
         // set the constraints within the scrollView
         self.scrollView.setConstraints()
@@ -159,7 +226,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
 
         
         //
-        // init Content
+        // init Content & add ChildViewController
         //
         if let contentID = self.contentViewStoryboardID
         {
@@ -219,7 +286,8 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
     }
     
     // add the Menu to the visualEffectsView
-    func setupMenuViewController(menuController: UIViewController?, inView view: UIVisualEffectView)
+    func setupMenuViewController(menuController: UIViewController?,
+        inView view: UIVisualEffectView)
     {
         if let menu = menuController
         {
@@ -230,8 +298,18 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
             
             let views = ["view": menu.view]
             let metrics = ["left": 60]
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-left-[view]|", options: nil, metrics: metrics, views: views))
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: views))
+            view.addConstraints(
+                NSLayoutConstraint.constraintsWithVisualFormat(
+                    "H:|-left-[view]|",
+                    options: nil,
+                    metrics: metrics,
+                    views: views))
+            view.addConstraints(
+                NSLayoutConstraint.constraintsWithVisualFormat(
+                    "V:|[view]|",
+                    options: nil,
+                    metrics: nil,
+                    views: views))
         }
     }
     
@@ -254,7 +332,8 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
     
     //MARK: - UIGestureRecognizer Delegate
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer,
+        shouldReceiveTouch touch: UITouch) -> Bool
     {
         let point = touch.locationInView(gestureRecognizer.view)
         if point.x < 20 && point.y > 64
@@ -289,6 +368,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
     {
         if scrollView.contentOffset.x <= 0.0
         {
+            // show
             if let scroll = scrollView as? JESideMenuScrollView
             {
                 scroll.toggleDropShadow(hide: false)
@@ -296,13 +376,44 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         }
         else if scrollView.contentOffset.x >= scrollView.bounds.width
         {
-            //println("Hide! D:")
+            // Hide
             if let scroll = scrollView as? JESideMenuScrollView
             {
                 scroll.toggleDropShadow(hide: true)
             }
         }
     }
+    
+
+    //MARK: - Rotation
+    // navigationbar get's smaller on iPhone in landscape mode
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection,
+        withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
+    {
+        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+        
+        if self.hasNavigationbar
+        {
+            self.portraitTopConstraint.active = false
+            self.landscapeTopConstraint.active = false
+            
+            // iPhone landscape
+            if newCollection.verticalSizeClass == .Compact
+            {
+                self.landscapeTopConstraint.active = true
+            }
+            else
+            {
+                self.portraitTopConstraint.active = true
+            }
+            
+            coordinator.animateAlongsideTransition(
+                {(context: UIViewControllerTransitionCoordinatorContext!) in
+                self.view.layoutIfNeeded()
+                }, completion: nil)
+        }
+    }
+
     
     //MARK: - viewDidLayoutSubviews, Hide Menu on Load
     // hide the menu on start and when rotated
@@ -509,7 +620,7 @@ class JELeftSideMenuViewController: UIViewController
     //MARK: - Insert your menu points here:
     //MARK: if you don't insert them via the storyboard
     var titles = [String]()
-    var icons = [UIImage]()
+    var icons = [UIImage?]()
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -562,6 +673,8 @@ class JELeftSideMenuViewController: UIViewController
     }
     
     // choose your icons in the storyboard
+    // this adds the images corresponding to
+    // the titles to the icon array
     func initIcons()
     {
         if self.icons.count == 0
@@ -570,10 +683,7 @@ class JELeftSideMenuViewController: UIViewController
             
             for menuIcon in menuIcons
             {
-                if let mi = menuIcon
-                {
-                    self.icons.append(mi)
-                }
+                self.icons.append(menuIcon)
             }
         }
     }
@@ -605,7 +715,10 @@ extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelega
         // set image
         if self.icons.count > indexPath.row
         {
-            cell.imageView?.image = icons[indexPath.row]
+            if let image = icons[indexPath.row]
+            {
+                cell.imageView?.image = image
+            }
         }
         
         if lightMenu
