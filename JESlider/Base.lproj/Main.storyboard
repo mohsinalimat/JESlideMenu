@@ -40,9 +40,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="lightMenu" value="NO"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="lightMenu" value="YES"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuPoint1" value="Home"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuPoint2" value="Category"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="menuIcon1" value="home"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="menuIcon2" value="menu"/>
                     </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EKG-NA-SUc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -205,6 +207,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="home" width="30" height="30"/>
         <image name="iOS-7-Wallpaper-Parallax-86" width="520" height="763"/>
+        <image name="menu" width="30" height="30"/>
     </resources>
 </document>

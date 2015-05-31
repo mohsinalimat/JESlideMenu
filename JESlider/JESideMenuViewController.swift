@@ -44,7 +44,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
 {
     @IBInspectable var contentViewStoryboardID: String?
     @IBInspectable var menuViewStoryboardID: String?
-    @IBInspectable var hasNavigationbar: Bool = true
+    @IBInspectable var hasNavigationbar: Bool = false
     
     var contentView: UIView!
     var menuView: UIVisualEffectView!
@@ -130,6 +130,45 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         // get the reference for the containerView
         self.menuView = self.scrollView.containerView
         
+        // set constraints for content & scrollview
+        self.setupConstraints()
+        
+        // set the constraints within the scrollView
+        self.scrollView.setConstraints()
+        
+        
+        // set delegate
+        self.scrollView.delegate = self
+        
+        //
+        // Pan Gesture
+        //
+        self.edgeGestureRecognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
+        self.edgeGestureRecognizer.delegate = self
+        self.view.addGestureRecognizer(self.edgeGestureRecognizer)
+        
+        // move pan gesture recognizer to menuView/visualEffectView
+        self.menuView.addGestureRecognizer(self.scrollView.panGestureRecognizer)
+
+        
+        //
+        // init Content & add ChildViewController
+        //
+        if let contentID = self.contentViewStoryboardID
+        {
+            self.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(contentID) as? UIViewController
+        }
+        
+        // set the menu after
+        // scrollView has been setup
+        if let menu = menuVC
+        {
+            self.menuViewController = menu
+        }
+    }
+    
+    func setupConstraints()
+    {
         // setup the constraints
         // the contentView fills whole the screen
         let views = ["contentView": self.contentView, "scrollView": self.scrollView]
@@ -142,7 +181,9 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView]|", options: nil, metrics: nil, views: views))
         self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView]|", options: nil, metrics: nil, views: views))
         
-
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView(width)]", options: nil, metrics: metrics, views: views))
+        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[scrollView]|", options: nil, metrics: nil, views: views))
+        
         // top constraint for scrollView
         // standard constraint
         // side menu covers completely the screen
@@ -186,7 +227,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         self.landscapeTopConstraint.active = false
         
         //
-        // activate constraints
+        // activate constraints for navigationbar
         //
         if self.hasNavigationbar
         {
@@ -203,41 +244,6 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         else
         {
             self.zeroTopConstraint.active = true
-        }
-        
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrollView(width)]", options: nil, metrics: metrics, views: views))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[scrollView]|", options: nil, metrics: nil, views: views))
-        
-        // set the constraints within the scrollView
-        self.scrollView.setConstraints()
-        
-        // set delegate
-        self.scrollView.delegate = self
-        
-        //
-        // Pan Gesture
-        //
-        self.edgeGestureRecognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
-        self.edgeGestureRecognizer.delegate = self
-        self.view.addGestureRecognizer(self.edgeGestureRecognizer)
-        
-        // move pan gesture recognizer to menuView/visualEffectView
-        self.menuView.addGestureRecognizer(self.scrollView.panGestureRecognizer)
-
-        
-        //
-        // init Content & add ChildViewController
-        //
-        if let contentID = self.contentViewStoryboardID
-        {
-            self.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(contentID) as? UIViewController
-        }
-        
-        // set the menu after
-        // scrollView has been setup
-        if let menu = menuVC
-        {
-            self.menuViewController = menu
         }
     }
     
@@ -349,7 +355,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         
         if pan.state == UIGestureRecognizerState.Began
         {
-            //self.scrollView.toggleDropShadow(false)
+            // 
         }
         else if pan.state == UIGestureRecognizerState.Changed
         {
@@ -369,17 +375,20 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
         if scrollView.contentOffset.x <= 0.0
         {
             // show
+            // menu is visible
+            // To-Do userinteraction disabled
             if let scroll = scrollView as? JESideMenuScrollView
             {
-                scroll.toggleDropShadow(hide: false)
+                scroll.toggleDropShadow(menuVisible: true)
             }
         }
         else if scrollView.contentOffset.x >= scrollView.bounds.width
         {
             // Hide
+            // menu is hidden
             if let scroll = scrollView as? JESideMenuScrollView
             {
-                scroll.toggleDropShadow(hide: true)
+                scroll.toggleDropShadow(menuVisible: false)
             }
         }
     }
@@ -585,9 +594,9 @@ class JESideMenuScrollView: UIScrollView
         }
     }
     
-    func toggleDropShadow(hide shouldHide:Bool)
+    func toggleDropShadow(menuVisible visible:Bool)
     {
-        var opacity: Float = shouldHide ? 0.0 : 0.5
+        var opacity: Float = visible ? 0.5 : 0.0
         
         self.containerView.layer.shadowOpacity = opacity
     }
@@ -717,17 +726,21 @@ extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelega
         {
             if let image = icons[indexPath.row]
             {
-                cell.imageView?.image = image
+                cell.imageView?.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
             }
         }
         
+        // adjust the text & image color to
+        // the visualEffectView (light/dark)
         if lightMenu
         {
             cell.textLabel?.textColor = UIColor.darkGrayColor()
+            cell.imageView?.tintColor = UIColor.darkGrayColor()
         }
         else
         {
             cell.textLabel?.textColor = UIColor.lightGrayColor()
+            cell.imageView?.tintColor = UIColor.lightGrayColor()
         }
         
         return cell
