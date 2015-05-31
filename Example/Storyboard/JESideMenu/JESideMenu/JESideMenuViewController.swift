@@ -776,9 +776,8 @@ extension JELeftSideMenuViewController: UITableViewDataSource, UITableViewDelega
         // Please note:
         // The titles/menu points must be the same as the StoryboardIDs!
         // this will raise an exception if your menu points aren't equal to your StoryboardIDs
-        sideMenuViewController?._toggleMenu()
         sideMenuViewController?.contentViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(self.titles[indexPath.row]) as? UIViewController
-        
+        sideMenuViewController?._toggleMenu()
     }
 }
 
