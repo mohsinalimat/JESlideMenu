@@ -313,7 +313,7 @@ class JESideMenuViewController: UIViewController, UIGestureRecognizerDelegate, U
             let top = self.hasNavigationbar ? 18 : 70
             
             let views = ["view": menu.view]
-            let metrics = ["top": top, "left": 66]
+            let metrics = ["top": top, "left": 60]
             view.addConstraints(
                 NSLayoutConstraint.constraintsWithVisualFormat(
                     "H:|-left-[view]|",
