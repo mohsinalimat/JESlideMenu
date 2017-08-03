@@ -8,7 +8,11 @@
 
 import UIKit
 
-class JESideMenu: UIViewController {
+protocol JESideMenuDelegate {
+    func toggleMenu()
+}
+
+class JESideMenu: UIViewController, JESideMenuDelegate {
     
     // Menu Items can be set in storyboard or here
     // MARK: add localization for menuItems later!
@@ -20,6 +24,10 @@ class JESideMenu: UIViewController {
     var menuNavigationController: JESideNavigationController!
     var menuTableView: JESideMenuTableViewController!
     var invisibleView: UIView!
+    
+    var leadingConstraint: NSLayoutConstraint!
+    var menuIsOpenConstant: CGFloat = 280.0
+    var isMenuOpen = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +52,7 @@ class JESideMenu: UIViewController {
         }
     }
     
-    // menu tableViewController to view and add autolayout
+    // menu tableViewController added to view and add autolayout
     func setupMenuTableViewWithItems(menuItems: [String]) {
         menuTableView = JESideMenuTableViewController(menuItems: menuItems)
         menuTableView.view.translatesAutoresizingMaskIntoConstraints = false
@@ -65,12 +73,21 @@ class JESideMenu: UIViewController {
                 menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
                 view.addSubview(menuNavigationController.view)
                 
-                // add fullscreen autolayout
-                addConstraintsToView(view: menuNavigationController.view)
-                //menuNavigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40.0).isActive = true
+                // set delegate for toggle action
+                menuNavigationController.menuDelegate = self
+                
+                // add autolayout for Animation
+                menuNavigationController.view.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+                menuNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+                menuNavigationController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+                leadingConstraint = menuNavigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+                leadingConstraint.isActive = true
             }
         }
     }
+    
+    // gray out navigationController
+    func setupInvisibleView() {}
     
     // fullscreen autolayout constraints via layout anchors
     func addConstraintsToView(view: UIView) {
@@ -88,6 +105,26 @@ class JESideMenu: UIViewController {
             controller?.title = identifier
         }
         return controller
+    }
+    
+    // toggle the menu
+    func toggleMenu() {
+        var constant: CGFloat = 0.0
+        if !isMenuOpen {
+            constant = menuIsOpenConstant
+        }
+        // animate the change
+        UIView.animate(withDuration: 0.2,
+                       delay: 0,
+                       options: .curveEaseInOut,
+                       animations: {
+                            self.leadingConstraint.constant = constant
+                            self.view.layoutIfNeeded()
+        },
+                       completion:{(finished) in
+                            self.isMenuOpen = !self.isMenuOpen
+        })
+
     }
 }
 
@@ -151,6 +188,8 @@ class JESideMenuTableViewController: UITableViewController {
 // MARK: -
 
 class JESideNavigationController: UINavigationController {
+    
+    var menuDelegate: JESideMenuDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -220,7 +259,35 @@ class JESideNavigationController: UINavigationController {
     
     // call delegate
     func toggle() {
-        print("toggle :D")
+        menuDelegate?.toggleMenu()
     }
 }
 
+// MARK: - Extensions
+
+@objc
+enum LayoutAnchorType: Int {
+    case top = 1
+    case leading
+    case trailing
+    case bottom
+    case centerX
+    case centerY
+    case left
+    case right
+}
+
+extension NSLayoutAnchor {
+    func constraintEqualToAnchor(anchor: NSLayoutAnchor!, constant:CGFloat, identifier: LayoutAnchorType) -> NSLayoutConstraint {
+        let constraint = self.constraint(equalTo: anchor, constant: constant)
+        constraint.identifier = String(identifier.rawValue)
+        return constraint
+    }
+}
+
+extension UIView {
+    func constraint(withIdentifier: LayoutAnchorType) -> NSLayoutConstraint? {
+        let id = String(withIdentifier.rawValue)
+        return self.constraints.filter{ $0.identifier == id }.first
+    }
+}

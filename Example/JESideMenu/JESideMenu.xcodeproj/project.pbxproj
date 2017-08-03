@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		897D44171F33200E00194028 /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897D44161F33200E00194028 /* TestVC.swift */; };
 		89FBAB431F31F52B00A890E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBAB421F31F52B00A890E1 /* AppDelegate.swift */; };
 		89FBAB451F31F52B00A890E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBAB441F31F52B00A890E1 /* ViewController.swift */; };
 		89FBAB481F31F52B00A890E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89FBAB461F31F52B00A890E1 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		897D44161F33200E00194028 /* TestVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		89FBAB3F1F31F52B00A890E1 /* JESideMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JESideMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89FBAB421F31F52B00A890E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89FBAB441F31F52B00A890E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				89FBAB441F31F52B00A890E1 /* ViewController.swift */,
 				89FBAB721F31F80E00A890E1 /* JESideMenu.swift */,
 				89FBAB461F31F52B00A890E1 /* Main.storyboard */,
+				897D44161F33200E00194028 /* TestVC.swift */,
 				89FBAB491F31F52B00A890E1 /* Assets.xcassets */,
 				89FBAB4B1F31F52B00A890E1 /* LaunchScreen.storyboard */,
 				89FBAB4E1F31F52B00A890E1 /* Info.plist */,
@@ -262,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				897D44171F33200E00194028 /* TestVC.swift in Sources */,
 				89FBAB731F31F80E00A890E1 /* JESideMenu.swift in Sources */,
 				89FBAB451F31F52B00A890E1 /* ViewController.swift in Sources */,
 				89FBAB431F31F52B00A890E1 /* AppDelegate.swift in Sources */,
@@ -519,6 +523,7 @@
 				89FBAB691F31F52B00A890E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89FBAB6A1F31F52B00A890E1 /* Build configuration list for PBXNativeTarget "JESideMenuTests" */ = {
 			isa = XCConfigurationList;
@@ -527,6 +532,7 @@
 				89FBAB6C1F31F52B00A890E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89FBAB6D1F31F52B00A890E1 /* Build configuration list for PBXNativeTarget "JESideMenuUITests" */ = {
 			isa = XCConfigurationList;
@@ -535,6 +541,7 @@
 				89FBAB6F1F31F52B00A890E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
