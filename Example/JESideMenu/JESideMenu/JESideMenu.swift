@@ -28,9 +28,16 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     
     var leadingConstraint: NSLayoutConstraint!
     var menuIsOpenConstant: CGFloat = 280.0
+    var menuIsOpenAlpha: CGFloat = 0.5
     var isMenuOpen = false
     
     var visibleViewControllerID = ""
+    
+    var edgeGestureRecognizer: UIPanGestureRecognizer!
+    var tapGestureRecognizer: UITapGestureRecognizer!
+    
+    var startPoint = CGPoint(x: 0, y: 0)
+    var edgeLocation = CGPoint(x: 0, y: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +45,9 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
         setupMenuItems()
         setupMenuTableViewWithItems(menuItems: menuItems)
         setupNavigationController()
+        setupInvisibleView()
+        
+        setupGestureRecognizer()
     }
     
     // MARK: - Setup Menu and NavigationController
@@ -75,6 +85,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
             if  let identifier = menuItems.first,
                 let homeController = instantiateViewControllerFromIdentifier(identifier: identifier) {
                 menuNavigationController = JESideNavigationController(rootViewController: homeController)
+                menuNavigationController.automaticallyAdjustsScrollViewInsets = true
                 visibleViewControllerID = identifier
                 
                 menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -89,12 +100,60 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
                 menuNavigationController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
                 leadingConstraint = menuNavigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
                 leadingConstraint.isActive = true
+                
+                // border on the left
+                let border = UIView()
+                border.backgroundColor = UIColor.black
+                border.alpha = 0.3
+                
+                view.addSubview(border)
+                border.translatesAutoresizingMaskIntoConstraints = false
+                
+                border.widthAnchor.constraint(equalToConstant: 1.0).isActive = true
+                border.heightAnchor.constraint(equalTo: menuNavigationController.view.heightAnchor).isActive = true
+                border.trailingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
+                border.centerYAnchor.constraint(equalTo: menuNavigationController.view.centerYAnchor).isActive = true
             }
         }
     }
     
     // gray out navigationController
-    func setupInvisibleView() {}
+    func setupInvisibleView() {
+        invisibleView = UIView()
+        invisibleView.backgroundColor = UIColor.white
+        invisibleView.alpha = 0.0
+        
+        invisibleView.translatesAutoresizingMaskIntoConstraints = false
+        menuNavigationController.view.addSubview(invisibleView)
+        
+        // autolayout
+        invisibleView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
+        invisibleView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: 64).isActive = true
+        invisibleView.trailingAnchor.constraint(equalTo: menuNavigationController.view.trailingAnchor).isActive = true
+        invisibleView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
+    }
+    
+    func setupGestureRecognizer() {
+        let gestureAreaView = UIView()
+        gestureAreaView.alpha = 0.1
+        //gestureAreaView.backgroundColor = UIColor.white
+        menuNavigationController.view.addSubview(gestureAreaView)
+        gestureAreaView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // autolayout
+        gestureAreaView.widthAnchor.constraint(equalToConstant: 20.0).isActive = true
+        gestureAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: 60).isActive = true
+        gestureAreaView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
+        gestureAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
+        
+        edgeGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(edgePanGestureRecognized(recognizer:)))
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognized(recognizer:)))
+        gestureAreaView.addGestureRecognizer(edgeGestureRecognizer)
+        menuNavigationController.view.addGestureRecognizer(tapGestureRecognizer)
+        
+        //menuNavigationController.view.addGestureRecognizer(edgeGestureRecognizer)
+        //menuNavigationController.view.addGestureRecognizer(tapGestureRecognizer)
+    }
     
     // fullscreen autolayout constraints via layout anchors
     func addConstraintsToView(view: UIView) {
@@ -116,14 +175,17 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     // toggle the menu
     func toggleMenu() {
         var constant: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
         if !isMenuOpen {
             constant = menuIsOpenConstant
+            alpha = menuIsOpenAlpha
         }
         // animate the change
         UIView.animate(withDuration: 0.2,
                        delay: 0,
                        options: .curveEaseInOut,
                        animations: {
+                            self.invisibleView.alpha = alpha
                             self.leadingConstraint.constant = constant
                             self.view.layoutIfNeeded()
         },
@@ -141,10 +203,65 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
             // load view controller(s)
             if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
                 controller.title = identifier
+                controller.automaticallyAdjustsScrollViewInsets = true
                 // if controller is UINavigationController {} //fetch children
                 menuNavigationController.setViewControllers([controller], animated: false)
                 visibleViewControllerID = identifier
             }
+        }
+    }
+    
+    // open and close menu
+    // add bounce behaviour!
+    func edgePanGestureRecognized(recognizer: UIPanGestureRecognizer) {
+        let currentPoint = recognizer.location(in: view)
+        switch recognizer.state {
+        case .began:
+            startPoint = currentPoint
+            edgeLocation.x = self.leadingConstraint.constant
+        case .changed:
+            let difference = round(currentPoint.x - startPoint.x)
+            let newConstant = round(edgeLocation.x + difference)
+            if newConstant >= 0 && newConstant <= menuIsOpenConstant {
+                self.leadingConstraint.constant = round(edgeLocation.x + difference)
+                
+            }
+        case .ended:
+            animateOpenCloseGesture(recognizer: recognizer)
+        default:
+            print("default")
+        }
+    }
+    
+    // close menu when it's open
+    func tapGestureRecognized(recognizer: UITapGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            if isMenuOpen {
+                toggleMenu()
+            }
+        default:
+            print("default")
+        }
+    }
+    
+    func animateOpenCloseGesture(recognizer: UIPanGestureRecognizer) {
+        let velocity = recognizer.velocity(in: view)
+        let threshold: CGFloat = 40.0
+        print(velocity.x)
+        
+        // menu was closed
+        if !isMenuOpen && velocity.x > 0 {
+            toggleMenu()
+        } else if !isMenuOpen && velocity.x < 0 {
+            isMenuOpen = true
+            toggleMenu()
+        } else if isMenuOpen && velocity.x > 0 {
+            isMenuOpen = false
+            toggleMenu()
+        } else {
+            isMenuOpen = true
+            toggleMenu()
         }
     }
 }
