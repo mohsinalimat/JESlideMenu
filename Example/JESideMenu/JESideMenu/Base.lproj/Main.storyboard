@@ -25,6 +25,7 @@
                     </view>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuItem1" value="Home"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="menuItem2" value="Test"/>
                     </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -34,7 +35,7 @@
         <!--TestVC-->
         <scene sceneID="NtR-Hk-D5O">
             <objects>
-                <viewController storyboardIdentifier="test" id="ZoN-lI-0gT" customClass="TestVC" customModule="JESideMenu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Test" id="ZoN-lI-0gT" customClass="TestVC" customModule="JESideMenu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PGy-bC-Etb"/>
                         <viewControllerLayoutGuide type="bottom" id="JQ7-y2-vab"/>

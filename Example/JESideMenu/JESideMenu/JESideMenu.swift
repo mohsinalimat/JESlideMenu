@@ -10,6 +10,7 @@ import UIKit
 
 protocol JESideMenuDelegate {
     func toggleMenu()
+    func showViewControllerAtIndexPath(indexPath: IndexPath)
 }
 
 class JESideMenu: UIViewController, JESideMenuDelegate {
@@ -28,6 +29,8 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     var leadingConstraint: NSLayoutConstraint!
     var menuIsOpenConstant: CGFloat = 280.0
     var isMenuOpen = false
+    
+    var visibleViewControllerID = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +61,9 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
         menuTableView.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(menuTableView.view)
         
+        // set delegate for switching viewControllers
+        menuTableView.menuDelegate = self
+        
         // add fullscreen autolayout
         addConstraintsToView(view: menuTableView.view)
     }
@@ -69,6 +75,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
             if  let identifier = menuItems.first,
                 let homeController = instantiateViewControllerFromIdentifier(identifier: identifier) {
                 menuNavigationController = JESideNavigationController(rootViewController: homeController)
+                visibleViewControllerID = identifier
                 
                 menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
                 view.addSubview(menuNavigationController.view)
@@ -99,12 +106,11 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     
     // instantiate viewcontroller from storyboard and set the title
     func instantiateViewControllerFromIdentifier(identifier: String) -> UIViewController? {
-        var controller: UIViewController?
-        if let c = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
-            controller = c
-            controller?.title = identifier
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
+            controller.title = identifier
+            return controller
         }
-        return controller
+        return nil
     }
     
     // toggle the menu
@@ -126,6 +132,21 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
         })
 
     }
+    
+    // set viewController in navigationController
+    func showViewControllerAtIndexPath(indexPath: IndexPath) {
+        let identifier = menuItems[indexPath.row]
+        
+        if visibleViewControllerID != identifier {
+            // load view controller(s)
+            if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
+                controller.title = identifier
+                // if controller is UINavigationController {} //fetch children
+                menuNavigationController.setViewControllers([controller], animated: false)
+                visibleViewControllerID = identifier
+            }
+        }
+    }
 }
 
 // MARK: -
@@ -134,6 +155,8 @@ class JESideMenuTableViewController: UITableViewController {
     
     let identifier = "cell"
     var menuItems = [String]()
+    
+    var menuDelegate: JESideMenuDelegate?
     
     init(menuItems: [String]) {
         super.init(style: .plain)
@@ -177,6 +200,12 @@ class JESideMenuTableViewController: UITableViewController {
     
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        menuDelegate?.showViewControllerAtIndexPath(indexPath: indexPath)
+        menuDelegate?.toggleMenu()
+    }
+    
     // delegate methods
     // selected row at indexPath
     
@@ -199,6 +228,11 @@ class JESideNavigationController: UINavigationController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         // override left barbuttonitem  with hamburger toggle button
         let image = createHamburgerIconImage()
         topViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(toggle))
