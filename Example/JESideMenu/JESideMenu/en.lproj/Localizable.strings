@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  JESideMenu
+
+  Created by JE on 04.08.17.
+  Copyright © 2017 JE. All rights reserved.
+*/
+"Home" = "Startpage";
+"Test" = "Cows";
+"navi" = "NavigationController";
+"tab" = "TabBar";

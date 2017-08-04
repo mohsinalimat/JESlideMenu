@@ -10,7 +10,7 @@ import UIKit
 
 protocol JESideMenuDelegate {
     func toggleMenu()
-    func showViewControllerAtIndexPath(indexPath: IndexPath)
+    func setViewControllerAtIndexPath(indexPath: IndexPath)
 }
 
 class JESideMenu: UIViewController, JESideMenuDelegate {
@@ -21,10 +21,14 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     @IBInspectable public var menuItem1: String!
     @IBInspectable public var menuItem2: String!
     @IBInspectable public var menuItem3: String!
+    @IBInspectable public var menuItem4: String!
+    @IBInspectable public var menuItem5: String!
+    @IBInspectable public var menuItem6: String!
     
     var menuNavigationController: JESideNavigationController!
     var menuTableView: JESideMenuTableViewController!
     var invisibleView: UIView!
+    var tapAreaView: UIView!
     
     var leadingConstraint: NSLayoutConstraint!
     var menuIsOpenConstant: CGFloat = 280.0
@@ -43,11 +47,13 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
         super.viewDidLoad()
 
         setupMenuItems()
-        setupMenuTableViewWithItems(menuItems: menuItems)
-        setupNavigationController()
-        setupInvisibleView()
-        
-        setupGestureRecognizer()
+        if menuItems.count != 0 {
+            setupMenuTableViewWithItems(menuItems: menuItems)
+            setupNavigationController()
+            setupInvisibleView()
+            
+            setupGestureRecognizer()
+        }
     }
     
     // MARK: - Setup Menu and NavigationController
@@ -55,7 +61,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     func setupMenuItems() {
         if menuItems == nil {
             menuItems = [String]()
-            let items = [menuItem1, menuItem2, menuItem3]
+            let items = [menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6]
             
             for item in items {
                 if let i = item {
@@ -84,12 +90,15 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
             // get the first item & instantiate as rootViewController
             if  let identifier = menuItems.first,
                 let homeController = instantiateViewControllerFromIdentifier(identifier: identifier) {
+                
+                homeController.title = NSLocalizedString(identifier, comment: "translated title")
                 menuNavigationController = JESideNavigationController(rootViewController: homeController)
                 menuNavigationController.automaticallyAdjustsScrollViewInsets = true
                 visibleViewControllerID = identifier
                 
                 menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
                 view.addSubview(menuNavigationController.view)
+                menuNavigationController.setBarButtonItem()
                 
                 // set delegate for toggle action
                 menuNavigationController.menuDelegate = self
@@ -120,7 +129,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     // gray out navigationController
     func setupInvisibleView() {
         invisibleView = UIView()
-        invisibleView.backgroundColor = UIColor.white
+        invisibleView.backgroundColor = UIColor.gray
         invisibleView.alpha = 0.0
         
         invisibleView.translatesAutoresizingMaskIntoConstraints = false
@@ -128,31 +137,41 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
         
         // autolayout
         invisibleView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
-        invisibleView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: 64).isActive = true
+        invisibleView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor).isActive = true
         invisibleView.trailingAnchor.constraint(equalTo: menuNavigationController.view.trailingAnchor).isActive = true
         invisibleView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
     }
     
     func setupGestureRecognizer() {
         let gestureAreaView = UIView()
-        gestureAreaView.alpha = 0.1
-        //gestureAreaView.backgroundColor = UIColor.white
+        gestureAreaView.backgroundColor = UIColor.clear
         menuNavigationController.view.addSubview(gestureAreaView)
         gestureAreaView.translatesAutoresizingMaskIntoConstraints = false
         
+        let tapAreaView = UIView()
+        tapAreaView.alpha = 0.0
+        tapAreaView.backgroundColor = UIColor.clear
+        menuNavigationController.view.addSubview(tapAreaView)
+        tapAreaView.translatesAutoresizingMaskIntoConstraints = false
+
+        let topConstant: CGFloat = 60.0
+        
         // autolayout
         gestureAreaView.widthAnchor.constraint(equalToConstant: 20.0).isActive = true
-        gestureAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: 60).isActive = true
+        gestureAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: topConstant).isActive = true
         gestureAreaView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
         gestureAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
         
+        tapAreaView.leadingAnchor.constraint(equalTo: gestureAreaView.trailingAnchor).isActive = true
+        tapAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor).isActive = true
+        tapAreaView.trailingAnchor.constraint(equalTo: menuNavigationController.view.trailingAnchor).isActive = true
+        tapAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
+
         edgeGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(edgePanGestureRecognized(recognizer:)))
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognized(recognizer:)))
         gestureAreaView.addGestureRecognizer(edgeGestureRecognizer)
-        menuNavigationController.view.addGestureRecognizer(tapGestureRecognizer)
-        
-        //menuNavigationController.view.addGestureRecognizer(edgeGestureRecognizer)
-        //menuNavigationController.view.addGestureRecognizer(tapGestureRecognizer)
+        tapAreaView.addGestureRecognizer(tapGestureRecognizer)
+        self.tapAreaView = tapAreaView
     }
     
     // fullscreen autolayout constraints via layout anchors
@@ -166,7 +185,10 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     // instantiate viewcontroller from storyboard and set the title
     func instantiateViewControllerFromIdentifier(identifier: String) -> UIViewController? {
         if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
-            controller.title = identifier
+            if let navigation = controller as? UINavigationController,
+                let root = navigation.topViewController {
+                    return root
+            }
             return controller
         }
         return nil
@@ -186,26 +208,35 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
                        options: .curveEaseInOut,
                        animations: {
                             self.invisibleView.alpha = alpha
+                            self.tapAreaView.alpha = alpha
                             self.leadingConstraint.constant = constant
                             self.view.layoutIfNeeded()
         },
                        completion:{(finished) in
                             self.isMenuOpen = !self.isMenuOpen
         })
-
     }
     
     // set viewController in navigationController
-    func showViewControllerAtIndexPath(indexPath: IndexPath) {
+    func setViewControllerAtIndexPath(indexPath: IndexPath) {
         let identifier = menuItems[indexPath.row]
+        var newController = UIViewController()
         
         if visibleViewControllerID != identifier {
             // load view controller(s)
             if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
-                controller.title = identifier
-                controller.automaticallyAdjustsScrollViewInsets = true
-                // if controller is UINavigationController {} //fetch children
-                menuNavigationController.setViewControllers([controller], animated: false)
+                if let navi = controller as? UINavigationController {
+                    if let root = navi.topViewController {
+                        newController = root
+                    }
+                } else {
+                    newController = controller
+                }
+                
+                newController.title = NSLocalizedString(identifier, comment: "translated title")
+                newController.automaticallyAdjustsScrollViewInsets = true
+                menuNavigationController.setViewControllers([newController], animated: true)
+                menuNavigationController.setBarButtonItem()
                 visibleViewControllerID = identifier
             }
         }
@@ -247,19 +278,17 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     
     func animateOpenCloseGesture(recognizer: UIPanGestureRecognizer) {
         let velocity = recognizer.velocity(in: view)
-        let threshold: CGFloat = 40.0
-        print(velocity.x)
         
         // menu was closed
-        if !isMenuOpen && velocity.x > 0 {
+        if !isMenuOpen && velocity.x > 0 {   // open it
             toggleMenu()
-        } else if !isMenuOpen && velocity.x < 0 {
+        } else if !isMenuOpen && velocity.x < 0 {   // close it
             isMenuOpen = true
             toggleMenu()
-        } else if isMenuOpen && velocity.x > 0 {
+        } else if isMenuOpen && velocity.x > 0 {    // open it
             isMenuOpen = false
             toggleMenu()
-        } else {
+        } else {                                // close it
             isMenuOpen = true
             toggleMenu()
         }
@@ -306,29 +335,18 @@ class JESideMenuTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         
-        cell.textLabel?.text = menuItems[indexPath.row]
+        let text = menuItems[indexPath.row]
+        cell.textLabel?.text = NSLocalizedString(text, comment: "translated menu text")
         
         return cell
     }
     
-    // type of cell
-    // enum -> Profil cell or MenuItem
-    func configureCell(cell: UITableViewCell, row: Int) {
-    
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        menuDelegate?.showViewControllerAtIndexPath(indexPath: indexPath)
+        //menuDelegate?.showViewControllerAtIndexPath(indexPath: indexPath)
+        menuDelegate?.setViewControllerAtIndexPath(indexPath: indexPath)
         menuDelegate?.toggleMenu()
     }
-    
-    // delegate methods
-    // selected row at indexPath
-    
-    // tableview style
-    
-    // MARK: - toggle animation
 }
 
 // MARK: -
@@ -340,17 +358,11 @@ class JESideNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // disabled pop gesture for consistency
+        self.interactivePopGestureRecognizer?.isEnabled = false
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        // override left barbuttonitem  with hamburger toggle button
+    func setBarButtonItem() {
         let image = createHamburgerIconImage()
         topViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(toggle))
     }
@@ -411,34 +423,5 @@ class JESideNavigationController: UINavigationController {
     // call delegate
     func toggle() {
         menuDelegate?.toggleMenu()
-    }
-}
-
-// MARK: - Extensions
-
-@objc
-enum LayoutAnchorType: Int {
-    case top = 1
-    case leading
-    case trailing
-    case bottom
-    case centerX
-    case centerY
-    case left
-    case right
-}
-
-extension NSLayoutAnchor {
-    func constraintEqualToAnchor(anchor: NSLayoutAnchor!, constant:CGFloat, identifier: LayoutAnchorType) -> NSLayoutConstraint {
-        let constraint = self.constraint(equalTo: anchor, constant: constant)
-        constraint.identifier = String(identifier.rawValue)
-        return constraint
-    }
-}
-
-extension UIView {
-    func constraint(withIdentifier: LayoutAnchorType) -> NSLayoutConstraint? {
-        let id = String(withIdentifier.rawValue)
-        return self.constraints.filter{ $0.identifier == id }.first
     }
 }
