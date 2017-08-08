@@ -6,6 +6,6 @@
   Copyright © 2017 JE. All rights reserved.
 */
 "Home" = "Startpage";
-"Test" = "Cows";
-"navi" = "NavigationController";
-"tab" = "TabBar";
+"Test" = "Table of Cows";
+"navi" = "Navigation in Navigation";
+"tab" = "TabBar Example";
