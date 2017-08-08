@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "iOS-7-Wallpaper-Parallax-86.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "iOS-7-Wallpaper-Parallax-86.jpg",
       "scale" : "2x"
     },
     {

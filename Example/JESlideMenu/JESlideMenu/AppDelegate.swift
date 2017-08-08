@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  JESideMenu
+//  JESlideMenu
 //
-//  Created by JE on 02.08.17.
+//  Created by JE on 08.08.17.
 //  Copyright © 2017 JE. All rights reserved.
 //
 

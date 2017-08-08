@@ -1,6 +1,6 @@
 //
-//  JESideMenu.swift
-//  JESideMenu
+//  JESlideMenu.swift
+//  JESlideMenu
 //
 //  Created by JE on 02.08.17.
 //  Copyright © 2017 JE. All rights reserved.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol JESideMenuDelegate {
+protocol JESlideMenuDelegate {
     func toggleMenu()
     func setViewControllerAtIndexPath(indexPath: IndexPath)
 }
 
-class JESideMenu: UIViewController, JESideMenuDelegate {
+class JESlideMenu: UIViewController, JESlideMenuDelegate {
     
     // Menu Items can be set in storyboard or here
     var menuItems: [String]!
@@ -57,13 +57,13 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     var textColor = UIColor.black
     var backgroundColor = UIColor.white
     
-    var menuNavigationController: JESideNavigationController!
-    var menuTableView: JESideMenuTableViewController!
+    var menuNavigationController: JESlideNavigationController!
+    var menuTableView: JESlideMenuTableViewController!
     var invisibleView: UIView!
     var tapAreaView: UIView!
     
     var leadingConstraint: NSLayoutConstraint!
-    var menuIsOpenConstant: CGFloat = 280.0
+    var menuIsOpenConstant: CGFloat = 0.0
     var menuIsOpenAlpha: CGFloat = 0.5
     var isMenuOpen = false
     
@@ -78,6 +78,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        calculateMenuConstant()
         setupMenuItems()
         setupIconImages()
         if menuItems.count != 0 {
@@ -88,6 +89,12 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
             
             setupGestureRecognizer()
         }
+    }
+    
+    func calculateMenuConstant() {
+        let width = self.view.bounds.width
+        let adjustedWidth: CGFloat = (width * 0.8)
+        menuIsOpenConstant = adjustedWidth > 280.0 ? 280 : adjustedWidth
     }
     
     // MARK: - Setup Menu and NavigationController
@@ -141,7 +148,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
             backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         }
         
-        menuTableView = JESideMenuTableViewController(menuItems: menuItems,
+        menuTableView = JESlideMenuTableViewController(menuItems: menuItems,
                                                       iconImages: iconImages,
                                                       headerImage: headerImage,
                                                       headerHeight: imageHeight,
@@ -171,7 +178,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
                 let homeController = instantiateViewControllerFromIdentifier(identifier: identifier) {
                 
                 homeController.title = NSLocalizedString(identifier, comment: "translated title")
-                menuNavigationController = JESideNavigationController(rootViewController: homeController)
+                menuNavigationController = JESlideNavigationController(rootViewController: homeController)
                 menuNavigationController.automaticallyAdjustsScrollViewInsets = true
                 visibleViewControllerID = identifier
                 
@@ -387,7 +394,7 @@ class JESideMenu: UIViewController, JESideMenuDelegate {
 
 // MARK: - Menu Controller
 
-class JESideMenuTableViewController: UITableViewController {
+class JESlideMenuTableViewController: UITableViewController {
     
     let identifier = "cell"
     var menuItems = [String]()
@@ -398,7 +405,7 @@ class JESideMenuTableViewController: UITableViewController {
     var backgroundColor: UIColor!
     var centerHeader = false
     
-    var menuDelegate: JESideMenuDelegate?
+    var menuDelegate: JESlideMenuDelegate?
     
     // adjust with logo-image for headerView and height
     init(menuItems: [String],
@@ -423,7 +430,7 @@ class JESideMenuTableViewController: UITableViewController {
         
         self.tableView.tableHeaderView = createHeaderView(image: headerImage, height: headerHeight)
         self.tableView.tableFooterView = UIView()
-        self.tableView.separatorInset.left = (18 + iconWidth + 14)
+        self.tableView.separatorInset.left = (16 + iconWidth + 14)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -437,7 +444,7 @@ class JESideMenuTableViewController: UITableViewController {
         tableView.backgroundColor = backgroundColor
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(JESideMenuTableViewCell.self,
+        tableView.register(JESlideMenuTableViewCell.self,
                            forCellReuseIdentifier: identifier)
         tableView.reloadData()
     }
@@ -451,7 +458,7 @@ class JESideMenuTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? JESideMenuTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? JESlideMenuTableViewCell
         cell?.setIcon(height: iconHeight, andWidth: iconWidth)
         
         let text = menuItems[indexPath.row]
@@ -474,7 +481,7 @@ class JESideMenuTableViewController: UITableViewController {
     func createHeaderView(image: UIImage?, height: CGFloat) -> UIView {
         let topConstant: CGFloat = 26.0
         let bottomConstant: CGFloat = 6.0
-        let left: CGFloat = (18.0 + iconWidth + 14.0)
+        let left: CGFloat = (16.0 + iconWidth + 14.0)
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: (topConstant + height + bottomConstant)))
         let imageView = UIImageView()
         
@@ -498,9 +505,9 @@ class JESideMenuTableViewController: UITableViewController {
 
 // MARK: - Navigation Controller
 
-class JESideNavigationController: UINavigationController {
+class JESlideNavigationController: UINavigationController {
     
-    var menuDelegate: JESideMenuDelegate?
+    var menuDelegate: JESlideMenuDelegate?
     var toggleButtonColor: UIColor?
     var barTitleColor: UIColor?
     var barTintColor: UIColor?
@@ -596,7 +603,7 @@ class JESideNavigationController: UINavigationController {
 
 // MARK: - 
 
-class JESideMenuTableViewCell: UITableViewCell {
+class JESlideMenuTableViewCell: UITableViewCell {
     
     var label = UILabel()
     var imageIcon = UIImageView()
@@ -633,7 +640,7 @@ class JESideMenuTableViewCell: UITableViewCell {
             imageIcon.translatesAutoresizingMaskIntoConstraints = false
             
             // autolayout of imageIcon
-            imageIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 18).isActive = true
+            imageIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
             imageIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
             imageIcon.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
             imageIcon.widthAnchor.constraint(equalToConstant: imageWidth).isActive = true
