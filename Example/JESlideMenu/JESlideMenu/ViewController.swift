@@ -18,7 +18,7 @@ class ViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         textLabel.text = text
-        self.title = NSLocalizedString("land", comment: "")
+        self.title = NSLocalizedString("color", comment: "")
     }
 
     override func didReceiveMemoryWarning() {

@@ -8,4 +8,11 @@
 "home" = "Startseite";
 "navi" = "Tabellenbeispiel";
 "tab" = "TabBar Beispiel";
-"land" = "Land";
+"color" = "Farbe";
+"red" = "Rot";
+"green" = "Grün";
+"blue" = "Blau";
+"cyan" = "Türkis";
+"magenta" = "Magenta";
+"purple" = "Violett";
+"eggshell" = "Eierschale";

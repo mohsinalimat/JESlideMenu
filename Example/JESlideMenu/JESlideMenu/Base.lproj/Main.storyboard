@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,7 +11,7 @@
         <!--Slide Menu-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="JESlideMenu" customModule="JESlideMenu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="alt" id="BYZ-38-t0r" customClass="JESlideMenu" customModule="JESlideMenu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -26,10 +25,39 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="menuItem1" value="home"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuItem2" value="navi"/>
                         <userDefinedRuntimeAttribute type="string" keyPath="menuItem3" value="tab"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="headerTextColor">
+                            <color key="value" red="0.19607843137254902" green="0.19607843137254902" blue="0.19607843137254902" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="string" keyPath="headerText" value="SLIDEMENU"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                            <color key="value" red="0.15763346354166666" green="0.15684678819444445" blue="0.15785047743055555" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="paddingLeft">
+                            <real key="value" value="26"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="imageHeight">
+                            <real key="value" value="60"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="image" keyPath="iconImage1" value="start"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="iconImage2" value="list"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="iconImage3" value="color"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="iconHeight">
+                            <real key="value" value="24"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="iconWidth">
+                            <real key="value" value="24"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="buttonColor">
+                            <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                            <color key="value" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="94" y="36"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="YJU-T1-JRb">
@@ -83,7 +111,9 @@
                             <outlet property="delegate" destination="3oL-CK-sae" id="jkg-gk-3Ti"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="QTt-k8-4Sh"/>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="QTt-k8-4Sh">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="dVm-oK-5OP"/>
+                    </navigationItem>
                     <connections>
                         <segue destination="ZUd-bP-CX5" kind="show" identifier="show" id="BGT-5x-6M7"/>
                     </connections>
@@ -92,10 +122,10 @@
             </objects>
             <point key="canvasLocation" x="1809" y="734"/>
         </scene>
-        <!--land-->
+        <!--View Controller-->
         <scene sceneID="aPJ-rA-GSp">
             <objects>
-                <viewController title="land" id="ZUd-bP-CX5" customClass="ViewController" customModule="JESlideMenu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ZUd-bP-CX5" customClass="ViewController" customModule="JESlideMenu" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TfN-fa-CD4"/>
                         <viewControllerLayoutGuide type="bottom" id="eVs-KP-42a"/>
@@ -105,8 +135,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qQb-Y8-u2i">
-                                <rect key="frame" x="166" y="323" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="157" y="312" width="60" height="44"/>
+                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="32"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -219,6 +249,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="color" width="24" height="24"/>
         <image name="iOS-7-Wallpaper-Parallax-86" width="520" height="763"/>
+        <image name="list" width="24" height="24"/>
+        <image name="start" width="24" height="24"/>
     </resources>
 </document>
