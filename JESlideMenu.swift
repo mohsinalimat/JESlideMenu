@@ -16,8 +16,9 @@ protocol JESlideMenuDelegate {
 class JESlideMenu: UIViewController, JESlideMenuDelegate {
     
     // Menu Items can be set in storyboard or here
-    var menuItems: [String]!
-    var iconImages: [UIImage?]!
+    private var menuItems: [String]!
+    private var iconImages: [UIImage?]!
+    
     @IBInspectable public var darkMode: Bool = false
     @IBInspectable public var lightStatusBar: Bool = false
     @IBInspectable public var menuItem1: String!
@@ -43,37 +44,49 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     @IBInspectable public var iconImage10: UIImage!
     
     @IBInspectable public var buttonImage: UIImage?
-    @IBInspectable public var buttonColor: UIColor = UIColor.black
+    @IBInspectable public var buttonColor: UIColor?
     @IBInspectable public var titleColor: UIColor?
     @IBInspectable public var barColor: UIColor?
     
-    @IBInspectable public var headerImage: UIImage?
-    @IBInspectable public var imageHeight: CGFloat = 30.0
+    @IBInspectable public var headerText: String?
+    @IBInspectable public var headerTextColor: UIColor = UIColor.black
+    @IBInspectable public var headerFont: String = "AvenirNextCondensed-Bold"
+    @IBInspectable public var headerFontSize: CGFloat = 28.0
+    @IBInspectable public var headerBorder: Bool = false
     @IBInspectable public var centerHeader: Bool = false
+    @IBInspectable public var image: UIImage?
+    @IBInspectable public var imageHeight: CGFloat = 30.0
     
     @IBInspectable public var iconHeight: CGFloat = 20.0
     @IBInspectable public var iconWidth: CGFloat = 20.0
     
-    var textColor = UIColor.black
-    var backgroundColor = UIColor.white
+    @IBInspectable public var paddingLeft: CGFloat = 22.0
+    @IBInspectable public var paddingTopBottom: CGFloat = 16.0
     
-    var menuNavigationController: JESlideNavigationController!
-    var menuTableView: JESlideMenuTableViewController!
-    var invisibleView: UIView!
-    var tapAreaView: UIView!
+    private var iconTextGap: CGFloat = 14.0
     
-    var leadingConstraint: NSLayoutConstraint!
-    var menuIsOpenConstant: CGFloat = 0.0
-    var menuIsOpenAlpha: CGFloat = 0.5
-    var isMenuOpen = false
+    @IBInspectable public var textFontName: String?
+    @IBInspectable public var textSize: CGFloat = 17.0
+    @IBInspectable public var textColor: UIColor = UIColor.black
+    @IBInspectable public var backgroundColor: UIColor = UIColor.clear
     
-    var visibleViewControllerID = ""
+    fileprivate var menuNavigationController: JESlideNavigationController!
+    fileprivate var menuTableView: JESlideMenuTableViewController!
+    private var invisibleView: UIView!
+    private var tapAreaView: UIView!
     
-    var edgeGestureRecognizer: UIPanGestureRecognizer!
-    var tapGestureRecognizer: UITapGestureRecognizer!
+    private var leadingConstraint: NSLayoutConstraint!
+    private var menuIsOpenConstant: CGFloat = 0.0
+    private var menuIsOpenAlpha: CGFloat = 0.5
+    private var isMenuOpen = false
     
-    var startPoint = CGPoint(x: 0, y: 0)
-    var edgeLocation = CGPoint(x: 0, y: 0)
+    private var visibleViewControllerID = ""
+    
+    private var edgeGestureRecognizer: UIPanGestureRecognizer!
+    private var tapGestureRecognizer: UITapGestureRecognizer!
+    
+    private var startPoint = CGPoint(x: 0, y: 0)
+    private var edgeLocation = CGPoint(x: 0, y: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,15 +104,15 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
         }
     }
     
-    func calculateMenuConstant() {
+    private func calculateMenuConstant() {
         let width = self.view.bounds.width
         let adjustedWidth: CGFloat = (width * 0.8)
-        menuIsOpenConstant = adjustedWidth > 280.0 ? 280 : adjustedWidth
+        menuIsOpenConstant = adjustedWidth > 280.0 ? 280.0 : adjustedWidth
     }
     
     // MARK: - Setup Menu and NavigationController
     // create array for all Storyboard IDs
-    func setupMenuItems() {
+    private func setupMenuItems() {
         if menuItems == nil {
             menuItems = [String]()
             let items = [menuItem1,
@@ -121,7 +134,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
         }
     }
     
-    func setupIconImages() {
+    private func setupIconImages() {
         if iconImages == nil {
             iconImages = [iconImage1,
                           iconImage2,
@@ -142,21 +155,33 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // menu tableViewController added to view and add autolayout
-    func setupMenuTableViewWithItems(menuItems: [String], iconImages: [UIImage?]) {
+    private func setupMenuTableViewWithItems(menuItems: [String], iconImages: [UIImage?]) {
         if darkMode {
             textColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
             backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         }
+        // system blue for all buttons
+        buttonColor = buttonColor == nil ? view.tintColor : buttonColor
         
         menuTableView = JESlideMenuTableViewController(menuItems: menuItems,
-                                                      iconImages: iconImages,
-                                                      headerImage: headerImage,
-                                                      headerHeight: imageHeight,
-                                                      iconHeight: iconHeight,
-                                                      iconWidth: iconWidth,
-                                                      textColor: textColor,
-                                                      backgroundColor: backgroundColor,
-                                                      centerHeader: centerHeader)
+                                                       iconImages: iconImages,
+                                                       headerText: headerText,
+                                                       headerTextColor: headerTextColor,
+                                                       headerFont: headerFont,
+                                                       headerFontSize: headerFontSize,
+                                                       headerImage: image,
+                                                       headerHeight: imageHeight,
+                                                       headerBorder: headerBorder,
+                                                       cellPadding: paddingTopBottom,
+                                                       cellPaddingLeft: paddingLeft,
+                                                       iconTextGap: iconTextGap,
+                                                       iconHeight: iconHeight,
+                                                       iconWidth: iconWidth,
+                                                       textFontName: textFontName,
+                                                       textSize: textSize,
+                                                       textColor: textColor,
+                                                       backgroundColor: backgroundColor,
+                                                       centerHeader: centerHeader)
         menuTableView.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(menuTableView.view)
         
@@ -171,7 +196,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // access navigationbar
-    func setupNavigationController() {
+    private func setupNavigationController() {
         if menuItems != nil {
             // get the first item & instantiate as rootViewController
             if  let identifier = menuItems.first,
@@ -218,7 +243,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // gray out navigationController
-    func setupInvisibleView() {
+    private func setupInvisibleView() {
         invisibleView = UIView()
         invisibleView.backgroundColor = UIColor.gray
         invisibleView.alpha = 0.0
@@ -234,7 +259,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // pan & tap gesture recognizer for the slider
-    func setupGestureRecognizer() {
+    private func setupGestureRecognizer() {
         let gestureAreaView = UIView()
         gestureAreaView.backgroundColor = UIColor.clear
         menuNavigationController.view.addSubview(gestureAreaView)
@@ -249,7 +274,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
         let topConstant: CGFloat = 60.0
         
         // autolayout
-        gestureAreaView.widthAnchor.constraint(equalToConstant: 20.0).isActive = true
+        gestureAreaView.widthAnchor.constraint(equalToConstant: 22.0).isActive = true
         gestureAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: topConstant).isActive = true
         gestureAreaView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
         gestureAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
@@ -267,7 +292,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // instantiate viewcontroller from storyboard and set the title
-    func instantiateViewControllerFromIdentifier(identifier: String) -> UIViewController? {
+    private func instantiateViewControllerFromIdentifier(identifier: String) -> UIViewController? {
         if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
             if let navigation = controller as? UINavigationController,
                 let root = navigation.topViewController {
@@ -361,7 +386,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
         }
     }
     
-    func animateOpenCloseGesture(recognizer: UIPanGestureRecognizer) {
+    private func animateOpenCloseGesture(recognizer: UIPanGestureRecognizer) {
         let velocity = recognizer.velocity(in: view)
         let locationX = self.leadingConstraint.constant
         let percent:CGFloat = 0.4 * menuIsOpenConstant
@@ -390,11 +415,38 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
         }
         return .default
     }
+    
+    // forward rotation notification
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        menuNavigationController.willTransition(to: newCollection, with: coordinator)
+    }
+    
+    // class methods to get the pre-installed fonts
+    static func printInstalledFonts() {
+        let familyNames = UIFont.familyNames
+        var fonts = [String]()
+        
+        for family in familyNames {
+            fonts += UIFont.fontNames(forFamilyName: family)
+        }
+        print(fonts)
+    }
+    
+    static func printFontNames(familyName: String) {
+        let familyNames = UIFont.familyNames
+        var fonts = [String]()
+        let filteredNames = familyNames.filter({$0.lowercased().contains(familyName.lowercased())})
+        for familyName in filteredNames {
+            fonts += UIFont.fontNames(forFamilyName: familyName)
+        }
+        print(fonts)
+    }
 }
 
 // MARK: - Menu Controller
 
-class JESlideMenuTableViewController: UITableViewController {
+private class JESlideMenuTableViewController: UITableViewController {
     
     let identifier = "cell"
     var menuItems = [String]()
@@ -402,18 +454,41 @@ class JESlideMenuTableViewController: UITableViewController {
     var iconHeight: CGFloat!
     var iconWidth: CGFloat!
     var textColor: UIColor!
+    var textFontName: String?
+    var textSize: CGFloat?
     var backgroundColor: UIColor!
     var centerHeader = false
+    let headerTop: CGFloat = 26.0
+    let headerBottom: CGFloat = 10.0
+    var cellPadding: CGFloat = 0.0
+    var cellPaddingLeft: CGFloat = 0.0
+    var iconTextGap: CGFloat = 0.0
     
     var menuDelegate: JESlideMenuDelegate?
+    
+    init(menuItems: [String], iconImages: [UIImage?]) {
+        super.init(style: .plain)
+        self.menuItems = menuItems
+        self.iconImages = iconImages
+    }
     
     // adjust with logo-image for headerView and height
     init(menuItems: [String],
          iconImages: [UIImage?],
+         headerText: String?,
+         headerTextColor: UIColor?,
+         headerFont: String,
+         headerFontSize: CGFloat,
          headerImage: UIImage?,
          headerHeight: CGFloat,
+         headerBorder: Bool,
+         cellPadding: CGFloat,
+         cellPaddingLeft: CGFloat,
+         iconTextGap: CGFloat,
          iconHeight: CGFloat,
          iconWidth: CGFloat,
+         textFontName: String?,
+         textSize: CGFloat?,
          textColor: UIColor,
          backgroundColor: UIColor,
          centerHeader: Bool) {
@@ -422,15 +497,29 @@ class JESlideMenuTableViewController: UITableViewController {
         self.iconImages = iconImages
         self.iconHeight = iconHeight
         self.iconWidth = iconWidth
+        self.cellPadding = cellPadding
+        self.cellPaddingLeft = cellPaddingLeft
+        self.iconTextGap = iconTextGap
         self.textColor = textColor
+        self.textFontName = textFontName
+        self.textSize = textSize
         self.backgroundColor = backgroundColor
         self.centerHeader = centerHeader
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 54.0
         
-        self.tableView.tableHeaderView = createHeaderView(image: headerImage, height: headerHeight)
+        self.tableView.tableHeaderView = createHeaderView(image: headerImage,
+                                                          text: headerText,
+                                                          textColor: headerTextColor,
+                                                          font: headerFont,
+                                                          fontSize:  headerFontSize,
+                                                          height: headerHeight,
+                                                          top: headerTop,
+                                                          left: cellPaddingLeft,
+                                                          bottom: headerBottom,
+                                                          withBorder: headerBorder)
         self.tableView.tableFooterView = UIView()
-        self.tableView.separatorInset.left = (16 + iconWidth + 14)
+        self.tableView.separatorInset.left = iconWidth == 0.0 ? cellPaddingLeft : (cellPaddingLeft + iconWidth + iconTextGap)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -460,9 +549,15 @@ class JESlideMenuTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? JESlideMenuTableViewCell
         cell?.setIcon(height: iconHeight, andWidth: iconWidth)
+        cell?.setCell(padding: cellPadding, leftPadding: cellPaddingLeft, andIconGap: iconTextGap)
         
         let text = menuItems[indexPath.row]
         let image = iconImages[indexPath.row]
+        
+        if  let name = textFontName,
+            let size = textSize {
+            cell?.label.font = UIFont(name: name, size: size)
+        }
         cell?.label.text = NSLocalizedString(text, comment: "translated menu text")
         cell?.label.textColor = textColor
         cell?.imageIcon.image = image
@@ -478,25 +573,74 @@ class JESlideMenuTableViewController: UITableViewController {
     }
     
     // table header view
-    func createHeaderView(image: UIImage?, height: CGFloat) -> UIView {
-        let topConstant: CGFloat = 26.0
-        let bottomConstant: CGFloat = 6.0
-        let left: CGFloat = (16.0 + iconWidth + 14.0)
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: (topConstant + height + bottomConstant)))
-        let imageView = UIImageView()
-        
-        imageView.contentMode = UIViewContentMode.scaleAspectFit
-        imageView.image = image
-        view.addSubview(imageView)
+    func createHeaderView(image: UIImage?,
+                          text: String?,
+                          textColor: UIColor?,
+                          font: String,
+                          fontSize: CGFloat,
+                          height: CGFloat,
+                          top: CGFloat,
+                          left: CGFloat,
+                          bottom: CGFloat,
+                          withBorder: Bool) -> UIView {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: (top + height + bottom)))
         view.backgroundColor = UIColor.clear
         
         // autolayout
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottomConstant).isActive = true
-        if centerHeader {
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -left).isActive = true
+        if image != nil {
+            let imageView = UIImageView()
+            imageView.contentMode = UIViewContentMode.scaleAspectFit
+            imageView.image = image
+            view.addSubview(imageView)
+
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left).isActive = true
+            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: top).isActive = true
+            if withBorder {
+                imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottom).isActive = true
+            } else {
+                imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            }
+            
+            if centerHeader {   // center header or set width to aspect ratio of height
+                imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -left).isActive = true
+            } else {
+                let fittingWidth = imageView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).width
+                let fittingHeight = imageView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+                let aspectRatio = round(fittingWidth/fittingHeight * 10.0) / 10.0
+                let newWidth = withBorder ? height * aspectRatio : (height + bottom) * aspectRatio
+                imageView.widthAnchor.constraint(equalToConstant: newWidth).isActive = true
+            }
+        }
+        
+        if withBorder {
+            let bottomLine = UIView()
+            bottomLine.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
+            bottomLine.alpha = 0.5
+            view.addSubview(bottomLine)
+            
+            bottomLine.translatesAutoresizingMaskIntoConstraints = false
+            bottomLine.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left).isActive = true
+            bottomLine.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            bottomLine.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            bottomLine.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+        }
+        
+        // only add text when there's no image
+        if text != nil && image == nil {
+            let label = UILabel()
+            label.font = UIFont(name: font, size: fontSize)
+            label.text = NSLocalizedString(text!, comment: "")
+            label.textColor = textColor
+            view.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left).isActive = true
+            if withBorder {
+                label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottom).isActive = true
+            } else {
+                label.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+            }
         }
         
         return view
@@ -505,13 +649,12 @@ class JESlideMenuTableViewController: UITableViewController {
 
 // MARK: - Navigation Controller
 
-class JESlideNavigationController: UINavigationController {
+private class JESlideNavigationController: UINavigationController {
     
     var menuDelegate: JESlideMenuDelegate?
     var toggleButtonColor: UIColor?
     var barTitleColor: UIColor?
     var barTintColor: UIColor?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -528,9 +671,12 @@ class JESlideNavigationController: UINavigationController {
         }
         if let barTitleColor = barTitleColor {
             self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: barTitleColor]
-            self.navigationBar.tintColor = barTitleColor
+        }
+        if let buttonColor = toggleButtonColor {
+            self.navigationBar.tintColor = buttonColor
         }
     }
+    
     func setBarButtonItemWith(image: UIImage?) {
         var buttonImage = UIImage()
         if let img = image {
@@ -603,23 +749,27 @@ class JESlideNavigationController: UINavigationController {
 
 // MARK: - 
 
-class JESlideMenuTableViewCell: UITableViewCell {
+private class JESlideMenuTableViewCell: UITableViewCell {
     
     var label = UILabel()
     var imageIcon = UIImageView()
     var imageHeight: CGFloat = 0.0
     var imageWidth: CGFloat = 0.0
     var didSetupConstraints = false
+    var cellPadding: CGFloat = 0.0
+    var cellPaddingLeft: CGFloat = 0.0
+    var iconTextGap: CGFloat = 0.0
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         // textStyle, color, font
         imageIcon.contentMode = .scaleAspectFit
+        imageIcon.backgroundColor = UIColor.clear
+        self.backgroundColor = UIColor.clear
 
         contentView.addSubview(label)
         contentView.addSubview(imageIcon)
-        self.backgroundColor = UIColor.clear
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -631,6 +781,12 @@ class JESlideMenuTableViewCell: UITableViewCell {
         imageWidth = andWidth
     }
     
+    func setCell(padding: CGFloat, leftPadding: CGFloat, andIconGap: CGFloat) {
+        cellPaddingLeft = leftPadding
+        cellPadding = padding
+        iconTextGap = andIconGap
+    }
+    
     override func updateConstraints() {
         super.updateConstraints()
         if !didSetupConstraints {
@@ -640,16 +796,20 @@ class JESlideMenuTableViewCell: UITableViewCell {
             imageIcon.translatesAutoresizingMaskIntoConstraints = false
             
             // autolayout of imageIcon
-            imageIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+            imageIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: cellPaddingLeft).isActive = true
             imageIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
             imageIcon.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
             imageIcon.widthAnchor.constraint(equalToConstant: imageWidth).isActive = true
             
             // autolayout label
-            label.leadingAnchor.constraint(equalTo: imageIcon.trailingAnchor, constant: 14).isActive = true
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16).isActive = true
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14).isActive = true
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16).isActive = true
+            if imageWidth == 0.0 {
+                label.leadingAnchor.constraint(equalTo: imageIcon.trailingAnchor).isActive = true
+            } else {
+                label.leadingAnchor.constraint(equalTo: imageIcon.trailingAnchor, constant: iconTextGap).isActive = true
+            }
+            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: cellPadding).isActive = true
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -cellPadding).isActive = true
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -cellPadding).isActive = true
         }
     }
 }

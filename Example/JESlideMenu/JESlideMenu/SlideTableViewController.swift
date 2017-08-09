@@ -10,7 +10,7 @@ import UIKit
 
 class SlideTableViewController: UITableViewController {
 
-    let data = ["France", "United Kingdom", "Germany", "Spain", "Italy", "Greek"]
+    let data = [NSLocalizedString("red", comment: ""), NSLocalizedString("green", comment: ""), NSLocalizedString("blue", comment: ""),NSLocalizedString("cyan", comment: ""),NSLocalizedString("magenta", comment: ""),NSLocalizedString("eggshell", comment: "")]
     let segueIdentifier = "show"
     let cellIdentifier = "cell"
     
