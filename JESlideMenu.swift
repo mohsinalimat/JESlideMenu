@@ -160,7 +160,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
             textColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
             backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         }
-        // system blue for all buttons
+        // system blue for all buttons by default
         buttonColor = buttonColor == nil ? view.tintColor : buttonColor
         
         menuTableView = JESlideMenuTableViewController(menuItems: menuItems,
@@ -183,6 +183,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
                                                        backgroundColor: backgroundColor,
                                                        centerHeader: centerHeader)
         menuTableView.view.translatesAutoresizingMaskIntoConstraints = false
+        self.addChildViewController(menuTableView)
         view.addSubview(menuTableView.view)
         
         // set delegate for switching viewControllers
@@ -193,6 +194,8 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
         menuTableView.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         menuTableView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         menuTableView.view.widthAnchor.constraint(equalToConstant: (menuIsOpenConstant + 2.0)).isActive = true
+        
+        menuTableView.didMove(toParentViewController: self)
     }
     
     // access navigationbar
@@ -205,9 +208,10 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
                 homeController.title = NSLocalizedString(identifier, comment: "translated title")
                 menuNavigationController = JESlideNavigationController(rootViewController: homeController)
                 menuNavigationController.automaticallyAdjustsScrollViewInsets = true
+                menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
                 visibleViewControllerID = identifier
                 
-                menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
+                self.addChildViewController(menuNavigationController)
                 view.addSubview(menuNavigationController.view)
                 
                 // customize navigationbar (color)
@@ -238,6 +242,8 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
                 border.heightAnchor.constraint(equalTo: menuNavigationController.view.heightAnchor).isActive = true
                 border.trailingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
                 border.centerYAnchor.constraint(equalTo: menuNavigationController.view.centerYAnchor).isActive = true
+                
+                menuNavigationController.didMove(toParentViewController: self)
             }
         }
     }

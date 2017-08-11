@@ -7,24 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		892490661F3DA44C00BCD957 /* JESlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892490651F3DA44C00BCD957 /* JESlideMenu.swift */; };
 		8925D3591F3A17E600932307 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3581F3A17E600932307 /* AppDelegate.swift */; };
 		8925D35E1F3A17E600932307 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8925D35C1F3A17E600932307 /* Main.storyboard */; };
 		8925D3601F3A17E600932307 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8925D35F1F3A17E600932307 /* Assets.xcassets */; };
 		8925D3631F3A17E600932307 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8925D3611F3A17E600932307 /* LaunchScreen.storyboard */; };
-		8925D36B1F3A182200932307 /* JESlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D36A1F3A182200932307 /* JESlideMenu.swift */; };
 		8925D3701F3A189100932307 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8925D3721F3A189100932307 /* Localizable.strings */; };
 		8925D3751F3A1DFD00932307 /* SlideTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */; };
 		8925D3771F3A1FAE00932307 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3761F3A1FAE00932307 /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		892490651F3DA44C00BCD957 /* JESlideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JESlideMenu.swift; path = ../../../JESlideMenu.swift; sourceTree = "<group>"; };
 		8925D3551F3A17E600932307 /* JESlideMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JESlideMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8925D3581F3A17E600932307 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8925D35D1F3A17E600932307 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8925D35F1F3A17E600932307 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8925D3621F3A17E600932307 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8925D3641F3A17E600932307 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8925D36A1F3A182200932307 /* JESlideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JESlideMenu.swift; sourceTree = "<group>"; };
 		8925D36E1F3A188B00932307 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
 		8925D36F1F3A188B00932307 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		8925D3711F3A189100932307 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -64,7 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				8925D3581F3A17E600932307 /* AppDelegate.swift */,
-				8925D36A1F3A182200932307 /* JESlideMenu.swift */,
+				892490651F3DA44C00BCD957 /* JESlideMenu.swift */,
 				8925D35C1F3A17E600932307 /* Main.storyboard */,
 				8925D3761F3A1FAE00932307 /* ViewController.swift */,
 				8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */,
@@ -150,8 +150,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8925D36B1F3A182200932307 /* JESlideMenu.swift in Sources */,
 				8925D3751F3A1DFD00932307 /* SlideTableViewController.swift in Sources */,
+				892490661F3DA44C00BCD957 /* JESlideMenu.swift in Sources */,
 				8925D3771F3A1FAE00932307 /* ViewController.swift in Sources */,
 				8925D3591F3A17E600932307 /* AppDelegate.swift in Sources */,
 			);
