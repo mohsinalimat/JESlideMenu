@@ -647,6 +647,10 @@ private class JESlideMenuTableViewController: UITableViewController {
             } else {
                 label.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             }
+            if centerHeader {   // center headline text
+                label.textAlignment = .center
+                label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -left).isActive = true
+            }
         }
         
         return view
