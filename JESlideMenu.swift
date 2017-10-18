@@ -72,18 +72,14 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     
     fileprivate var menuNavigationController: JESlideNavigationController!
     fileprivate var menuTableView: JESlideMenuTableViewController!
-    private var invisibleView: UIView!
     private var tapAreaView: UIView!
     
     private var leadingConstraint: NSLayoutConstraint!
     private var menuIsOpenConstant: CGFloat = 0.0
-    private var menuIsOpenAlpha: CGFloat = 0.5
+    private var menuIsOpenAlpha: CGFloat = 0.2
     private var isMenuOpen = false
     
     private var visibleViewControllerID = ""
-    
-    private var edgeGestureRecognizer: UIPanGestureRecognizer!
-    private var tapGestureRecognizer: UITapGestureRecognizer!
     
     private var startPoint = CGPoint(x: 0, y: 0)
     private var edgeLocation = CGPoint(x: 0, y: 0)
@@ -98,12 +94,11 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
             setupMenuTableViewWithItems(menuItems: menuItems,
                                         iconImages: iconImages)
             setupNavigationController()
-            setupInvisibleView()
-            
             setupGestureRecognizer()
         }
     }
     
+    // calculate the menu width for iPhone/iPad
     private func calculateMenuConstant() {
         let width = self.view.bounds.width
         let adjustedWidth: CGFloat = (width * 0.8)
@@ -148,8 +143,10 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
                           iconImage10,
             ]
             let count = iconImages.filter({$0 != nil}).count
-            if count == 0 && iconWidth == 20.0 {
-                iconWidth = 0.0     // no icons -> discard imageWidth
+            
+            // no icons -> discard imageWidth
+            if count == 0 {
+                iconWidth = 0.0
             }
         }
     }
@@ -190,10 +187,12 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
         menuTableView.menuDelegate = self
         
         // add fullscreen autolayout
-        menuTableView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        menuTableView.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        menuTableView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        menuTableView.view.widthAnchor.constraint(equalToConstant: (menuIsOpenConstant + 2.0)).isActive = true
+        NSLayoutConstraint.activate([
+            menuTableView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            menuTableView.view.topAnchor.constraint(equalTo: view.topAnchor),
+            menuTableView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            menuTableView.view.widthAnchor.constraint(equalToConstant: (menuIsOpenConstant + 2.0))
+            ])
         
         menuTableView.didMove(toParentViewController: self)
     }
@@ -224,11 +223,14 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
                 menuNavigationController.menuDelegate = self
                 
                 // add autolayout for Animation
-                menuNavigationController.view.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-                menuNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-                menuNavigationController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
                 leadingConstraint = menuNavigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-                leadingConstraint.isActive = true
+                
+                NSLayoutConstraint.activate([
+                    menuNavigationController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+                    menuNavigationController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                    menuNavigationController.view.topAnchor.constraint(equalTo: view.topAnchor),
+                    leadingConstraint
+                    ])
                 
                 // border on the left
                 let border = UIView()
@@ -238,62 +240,53 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
                 view.addSubview(border)
                 border.translatesAutoresizingMaskIntoConstraints = false
                 
-                border.widthAnchor.constraint(equalToConstant: 1.0).isActive = true
-                border.heightAnchor.constraint(equalTo: menuNavigationController.view.heightAnchor).isActive = true
-                border.trailingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
-                border.centerYAnchor.constraint(equalTo: menuNavigationController.view.centerYAnchor).isActive = true
+                NSLayoutConstraint.activate([
+                    border.widthAnchor.constraint(equalToConstant: 1.0),
+                    border.heightAnchor.constraint(equalTo: menuNavigationController.view.heightAnchor),
+                    border.trailingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor),
+                    border.centerYAnchor.constraint(equalTo: menuNavigationController.view.centerYAnchor)
+                    ])
                 
                 menuNavigationController.didMove(toParentViewController: self)
             }
         }
     }
-    
-    // gray out navigationController
-    private func setupInvisibleView() {
-        invisibleView = UIView()
-        invisibleView.backgroundColor = UIColor.gray
-        invisibleView.alpha = 0.0
-        
-        invisibleView.translatesAutoresizingMaskIntoConstraints = false
-        menuNavigationController.view.addSubview(invisibleView)
-        
-        // autolayout
-        invisibleView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
-        invisibleView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor).isActive = true
-        invisibleView.trailingAnchor.constraint(equalTo: menuNavigationController.view.trailingAnchor).isActive = true
-        invisibleView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
-    }
-    
+
     // pan & tap gesture recognizer for the slider
     private func setupGestureRecognizer() {
-        let gestureAreaView = UIView()
-        gestureAreaView.backgroundColor = UIColor.clear
-        menuNavigationController.view.addSubview(gestureAreaView)
-        gestureAreaView.translatesAutoresizingMaskIntoConstraints = false
+        let swipeGestureAreaView = UIView()
+        swipeGestureAreaView.backgroundColor = UIColor.clear
+        swipeGestureAreaView.translatesAutoresizingMaskIntoConstraints = false
+        menuNavigationController.view.addSubview(swipeGestureAreaView)
         
         let tapAreaView = UIView()
         tapAreaView.alpha = 0.0
-        tapAreaView.backgroundColor = UIColor.clear
-        menuNavigationController.view.addSubview(tapAreaView)
+        tapAreaView.backgroundColor = UIColor.black
         tapAreaView.translatesAutoresizingMaskIntoConstraints = false
+        menuNavigationController.view.addSubview(tapAreaView)
 
         let topConstant: CGFloat = 60.0
         
         // autolayout
-        gestureAreaView.widthAnchor.constraint(equalToConstant: 22.0).isActive = true
-        gestureAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: topConstant).isActive = true
-        gestureAreaView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor).isActive = true
-        gestureAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
-        
-        tapAreaView.leadingAnchor.constraint(equalTo: gestureAreaView.trailingAnchor).isActive = true
-        tapAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor).isActive = true
-        tapAreaView.trailingAnchor.constraint(equalTo: menuNavigationController.view.trailingAnchor).isActive = true
-        tapAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            swipeGestureAreaView.widthAnchor.constraint(equalToConstant: 22.0),
+            swipeGestureAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor, constant: topConstant),
+            swipeGestureAreaView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor),
+            swipeGestureAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor),
+            tapAreaView.leadingAnchor.constraint(equalTo: menuNavigationController.view.leadingAnchor),
+            tapAreaView.topAnchor.constraint(equalTo: menuNavigationController.view.topAnchor),
+            tapAreaView.trailingAnchor.constraint(equalTo: menuNavigationController.view.trailingAnchor),
+            tapAreaView.bottomAnchor.constraint(equalTo: menuNavigationController.view.bottomAnchor)
+            ])
 
-        edgeGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(edgePanGestureRecognized(recognizer:)))
-        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognized(recognizer:)))
-        gestureAreaView.addGestureRecognizer(edgeGestureRecognizer)
+        let edgeGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(edgePanGestureRecognized(recognizer:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognized(recognizer:)))
+        let swipeGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(edgePanGestureRecognized(recognizer:)))
+        
+        swipeGestureAreaView.addGestureRecognizer(edgeGestureRecognizer)
         tapAreaView.addGestureRecognizer(tapGestureRecognizer)
+        tapAreaView.addGestureRecognizer(swipeGestureRecognizer)
+
         self.tapAreaView = tapAreaView
     }
     
@@ -322,12 +315,11 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
                        delay: 0,
                        options: .curveEaseInOut,
                        animations: {
-                            self.invisibleView.alpha = alpha
                             self.tapAreaView.alpha = alpha
                             self.leadingConstraint.constant = constant
                             self.view.layoutIfNeeded()
         },
-                       completion:{(finished) in
+                       completion:{ finished in
                             self.isMenuOpen = !self.isMenuOpen
         })
     }
@@ -358,7 +350,6 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // open and close menu
-    // add bounce behaviour!
     @objc func edgePanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let currentPoint = recognizer.location(in: view)
         switch recognizer.state {
@@ -371,7 +362,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
             if newConstant >= 0 && newConstant <= menuIsOpenConstant {
                 self.leadingConstraint.constant = round(edgeLocation.x + difference)
                 let alpha = round(round(edgeLocation.x + difference) / menuIsOpenConstant * menuIsOpenAlpha * 10.0) / 10.0 // min: 0.0 max: 0.5
-                self.invisibleView.alpha = alpha
+                self.tapAreaView.alpha = alpha
             }
         case .ended:
             animateOpenCloseGesture(recognizer: recognizer)
@@ -382,13 +373,14 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     
     // close menu when it's open
     @objc func tapGestureRecognized(recognizer: UITapGestureRecognizer) {
-        switch recognizer.state {
-        case .ended:
-            if isMenuOpen {
+        
+        if isMenuOpen {
+            switch recognizer.state {
+            case .ended:
                 toggleMenu()
+            default:
+                print("default")
             }
-        default:
-            print("default")
         }
     }
     
@@ -623,13 +615,15 @@ private class JESlideMenuTableViewController: UITableViewController {
             let bottomLine = UIView()
             bottomLine.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
             bottomLine.alpha = 0.5
+            bottomLine.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(bottomLine)
             
-            bottomLine.translatesAutoresizingMaskIntoConstraints = false
-            bottomLine.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left).isActive = true
-            bottomLine.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-            bottomLine.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            bottomLine.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+            NSLayoutConstraint.activate([
+                bottomLine.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left),
+                bottomLine.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                bottomLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                bottomLine.heightAnchor.constraint(equalToConstant: 1.0)
+                ])
         }
         
         // only add text when there's no image
@@ -778,6 +772,7 @@ private class JESlideMenuTableViewCell: UITableViewCell {
         imageIcon.backgroundColor = UIColor.clear
         self.backgroundColor = UIColor.clear
 
+        // tableview cell contentView
         contentView.addSubview(label)
         contentView.addSubview(imageIcon)
     }
@@ -806,10 +801,12 @@ private class JESlideMenuTableViewCell: UITableViewCell {
             imageIcon.translatesAutoresizingMaskIntoConstraints = false
             
             // autolayout of imageIcon
-            imageIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: cellPaddingLeft).isActive = true
-            imageIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-            imageIcon.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
-            imageIcon.widthAnchor.constraint(equalToConstant: imageWidth).isActive = true
+            NSLayoutConstraint.activate([
+                imageIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: cellPaddingLeft),
+                imageIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+                imageIcon.heightAnchor.constraint(equalToConstant: imageHeight),
+                imageIcon.widthAnchor.constraint(equalToConstant: imageWidth)
+                ])
             
             // autolayout label
             if imageWidth == 0.0 {
@@ -817,9 +814,12 @@ private class JESlideMenuTableViewCell: UITableViewCell {
             } else {
                 label.leadingAnchor.constraint(equalTo: imageIcon.trailingAnchor, constant: iconTextGap).isActive = true
             }
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: cellPadding).isActive = true
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -cellPadding).isActive = true
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -cellPadding).isActive = true
+            
+            NSLayoutConstraint.activate([
+                label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: cellPadding),
+                label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -cellPadding),
+                label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -cellPadding)
+                ])
         }
     }
 }
