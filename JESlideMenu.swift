@@ -359,7 +359,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     
     // open and close menu
     // add bounce behaviour!
-    func edgePanGestureRecognized(recognizer: UIPanGestureRecognizer) {
+    @objc func edgePanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let currentPoint = recognizer.location(in: view)
         switch recognizer.state {
         case .began:
@@ -381,7 +381,7 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // close menu when it's open
-    func tapGestureRecognized(recognizer: UITapGestureRecognizer) {
+    @objc func tapGestureRecognized(recognizer: UITapGestureRecognizer) {
         switch recognizer.state {
         case .ended:
             if isMenuOpen {
@@ -680,7 +680,7 @@ private class JESlideNavigationController: UINavigationController {
             self.navigationBar.barTintColor = tintColor
         }
         if let barTitleColor = barTitleColor {
-            self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: barTitleColor]
+            self.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: barTitleColor]
         }
         if let buttonColor = toggleButtonColor {
             self.navigationBar.tintColor = buttonColor
@@ -752,7 +752,7 @@ private class JESlideNavigationController: UINavigationController {
     }
     
     // call delegate
-    func toggle() {
+    @objc func toggle() {
         menuDelegate?.toggleMenu()
     }
 }
