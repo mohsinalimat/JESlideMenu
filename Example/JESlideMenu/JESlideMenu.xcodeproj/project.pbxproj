@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		892490661F3DA44C00BCD957 /* JESlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892490651F3DA44C00BCD957 /* JESlideMenu.swift */; };
 		8925D3591F3A17E600932307 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3581F3A17E600932307 /* AppDelegate.swift */; };
 		8925D35E1F3A17E600932307 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8925D35C1F3A17E600932307 /* Main.storyboard */; };
 		8925D3601F3A17E600932307 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8925D35F1F3A17E600932307 /* Assets.xcassets */; };
@@ -15,10 +14,14 @@
 		8925D3701F3A189100932307 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8925D3721F3A189100932307 /* Localizable.strings */; };
 		8925D3751F3A1DFD00932307 /* SlideTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */; };
 		8925D3771F3A1FAE00932307 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3761F3A1FAE00932307 /* ViewController.swift */; };
+		897F30721F9A69B10039523F /* JESlideMenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30711F9A69B10039523F /* JESlideMenuTableViewController.swift */; };
+		897F30741F9A6A0B0039523F /* JESlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30731F9A6A0A0039523F /* JESlideMenuController.swift */; };
+		897F30761F9A6AC60039523F /* JESlideNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30751F9A6AC60039523F /* JESlideNavigationController.swift */; };
+		897F30781F9A6B0F0039523F /* JESlideMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30771F9A6B0F0039523F /* JESlideMenuTableViewCell.swift */; };
+		897F307A1F9A6F3F0039523F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30791F9A6F3F0039523F /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		892490651F3DA44C00BCD957 /* JESlideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JESlideMenu.swift; path = ../../../JESlideMenu.swift; sourceTree = "<group>"; };
 		8925D3551F3A17E600932307 /* JESlideMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JESlideMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8925D3581F3A17E600932307 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8925D35D1F3A17E600932307 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -31,6 +34,11 @@
 		8925D3731F3A189400932307 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideTableViewController.swift; sourceTree = "<group>"; };
 		8925D3761F3A1FAE00932307 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		897F30711F9A69B10039523F /* JESlideMenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideMenuTableViewController.swift; sourceTree = "<group>"; };
+		897F30731F9A6A0A0039523F /* JESlideMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideMenuController.swift; sourceTree = "<group>"; };
+		897F30751F9A6AC60039523F /* JESlideNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideNavigationController.swift; sourceTree = "<group>"; };
+		897F30771F9A6B0F0039523F /* JESlideMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideMenuTableViewCell.swift; sourceTree = "<group>"; };
+		897F30791F9A6F3F0039523F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				8925D3581F3A17E600932307 /* AppDelegate.swift */,
-				892490651F3DA44C00BCD957 /* JESlideMenu.swift */,
+				897F306F1F9A692B0039523F /* SlideMenu */,
 				8925D35C1F3A17E600932307 /* Main.storyboard */,
 				8925D3761F3A1FAE00932307 /* ViewController.swift */,
 				8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */,
@@ -74,6 +82,18 @@
 				8925D3641F3A17E600932307 /* Info.plist */,
 			);
 			path = JESlideMenu;
+			sourceTree = "<group>";
+		};
+		897F306F1F9A692B0039523F /* SlideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				897F30731F9A6A0A0039523F /* JESlideMenuController.swift */,
+				897F30711F9A69B10039523F /* JESlideMenuTableViewController.swift */,
+				897F30751F9A6AC60039523F /* JESlideNavigationController.swift */,
+				897F30771F9A6B0F0039523F /* JESlideMenuTableViewCell.swift */,
+				897F30791F9A6F3F0039523F /* Extensions.swift */,
+			);
+			path = SlideMenu;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,7 +106,6 @@
 				8925D3511F3A17E600932307 /* Sources */,
 				8925D3521F3A17E600932307 /* Frameworks */,
 				8925D3531F3A17E600932307 /* Resources */,
-				894B24191F9A52050019173D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -147,31 +166,19 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		894B24191F9A52050019173D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		8925D3511F3A17E600932307 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				897F30761F9A6AC60039523F /* JESlideNavigationController.swift in Sources */,
 				8925D3751F3A1DFD00932307 /* SlideTableViewController.swift in Sources */,
-				892490661F3DA44C00BCD957 /* JESlideMenu.swift in Sources */,
 				8925D3771F3A1FAE00932307 /* ViewController.swift in Sources */,
+				897F307A1F9A6F3F0039523F /* Extensions.swift in Sources */,
+				897F30741F9A6A0B0039523F /* JESlideMenuController.swift in Sources */,
 				8925D3591F3A17E600932307 /* AppDelegate.swift in Sources */,
+				897F30781F9A6B0F0039523F /* JESlideMenuTableViewCell.swift in Sources */,
+				897F30721F9A69B10039523F /* JESlideMenuTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
