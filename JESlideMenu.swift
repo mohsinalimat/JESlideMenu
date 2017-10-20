@@ -373,14 +373,12 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     
     // close menu when it's open
     @objc func tapGestureRecognized(recognizer: UITapGestureRecognizer) {
-        
-        if isMenuOpen {
-            switch recognizer.state {
-            case .ended:
-                toggleMenu()
-            default:
-                print("default")
-            }
+
+        switch recognizer.state {
+        case .ended:
+            toggleMenu()
+        default:
+            print("default")
         }
     }
     
@@ -415,7 +413,8 @@ class JESlideMenu: UIViewController, JESlideMenuDelegate {
     }
     
     // forward rotation notification
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func willTransition(to newCollection: UITraitCollection,
+                                 with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         menuNavigationController.willTransition(to: newCollection, with: coordinator)
     }
