@@ -19,7 +19,6 @@ class JESlideMenuTableViewController: UITableViewController {
     var textFontName: String?
     var textSize: CGFloat?
     var backgroundColor: UIColor!
-    var centerHeader = false
     let headerTop: CGFloat = 26.0
     let headerBottom: CGFloat = 10.0
     var cellPadding: CGFloat = 0.0
@@ -35,53 +34,41 @@ class JESlideMenuTableViewController: UITableViewController {
     }
 
     // adjust with logo-image for headerView and height
-    init(menuItems: [String],
-         iconImages: [UIImage?],
-         headerText: String?,
-         headerTextColor: UIColor?,
-         headerFont: String,
-         headerFontSize: CGFloat,
-         headerImage: UIImage?,
-         headerHeight: CGFloat,
-         headerBorder: Bool,
-         cellPadding: CGFloat,
-         cellPaddingLeft: CGFloat,
-         iconTextGap: CGFloat,
-         iconHeight: CGFloat,
-         iconWidth: CGFloat,
-         textFontName: String?,
-         textSize: CGFloat?,
-         textColor: UIColor,
-         backgroundColor: UIColor,
-         centerHeader: Bool) {
+    init(configuration: MenuConfiguration) {
         super.init(style: .plain)
-        self.menuItems = menuItems
-        self.iconImages = iconImages
-        self.iconHeight = iconHeight
-        self.iconWidth = iconWidth
-        self.cellPadding = cellPadding
-        self.cellPaddingLeft = cellPaddingLeft
-        self.iconTextGap = iconTextGap
-        self.textColor = textColor
-        self.textFontName = textFontName
-        self.textSize = textSize
-        self.backgroundColor = backgroundColor
-        self.centerHeader = centerHeader
+
+        menuItems = configuration.menuItemNames
+        iconImages = configuration.iconImages
+        iconHeight = configuration.iconHeight
+        iconWidth = configuration.iconWidth
+        cellPadding = configuration.cellPadding
+        cellPaddingLeft = configuration.cellPaddingLeft
+        iconTextGap = configuration.iconTextGap
+        textColor = configuration.textColor
+        textFontName = configuration.textFontName
+        textSize = configuration.textSize
+        backgroundColor = configuration.backgroundColor
+
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 54.0
 
-        self.tableView.tableHeaderView = createHeaderView(image: headerImage,
-                                                          text: headerText,
-                                                          textColor: headerTextColor,
-                                                          font: headerFont,
-                                                          fontSize:  headerFontSize,
-                                                          height: headerHeight,
-                                                          top: headerTop,
-                                                          left: cellPaddingLeft,
-                                                          bottom: headerBottom,
-                                                          withBorder: headerBorder)
-        self.tableView.tableFooterView = UIView()
-        self.tableView.separatorInset.left = iconWidth == 0.0 ? cellPaddingLeft : (cellPaddingLeft + iconWidth + iconTextGap)
+        let headerConfig = HeaderConfiguration()
+        headerConfig.image = configuration.headerImage
+        headerConfig.text = configuration.headerText
+        headerConfig.textColor = configuration.headerTextColor
+        headerConfig.font = configuration.headerFont
+        headerConfig.fontSize = configuration.headerFontSize
+        headerConfig.height = configuration.headerHeight
+        headerConfig.left = configuration.cellPaddingLeft
+        headerConfig.withBorder = configuration.headerBorder
+        headerConfig.centerHeader = configuration.centerHeader
+        headerConfig.top = headerTop
+        headerConfig.bottom = headerBottom
+
+        tableView.tableHeaderView = createHeaderView(configuration: headerConfig)
+
+        tableView.tableFooterView = UIView()
+        tableView.separatorInset.left = iconWidth == 0.0 ? cellPaddingLeft : (cellPaddingLeft + iconWidth + iconTextGap)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -138,47 +125,48 @@ class JESlideMenuTableViewController: UITableViewController {
     }
 
     // table header view
-    func createHeaderView(image: UIImage?,
-                          text: String?,
-                          textColor: UIColor?,
-                          font: String,
-                          fontSize: CGFloat,
-                          height: CGFloat,
-                          top: CGFloat,
-                          left: CGFloat,
-                          bottom: CGFloat,
-                          withBorder: Bool) -> UIView {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: (top + height + bottom)))
+
+    private func createHeaderView(configuration: HeaderConfiguration) -> UIView {
+        let height = configuration.top + configuration.height + configuration.bottom
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: height))
         view.backgroundColor = UIColor.clear
 
         // autolayout
-        if image != nil {
+        if configuration.image != nil {
             let imageView = UIImageView()
             imageView.contentMode = UIViewContentMode.scaleAspectFit
-            imageView.image = image
+            imageView.image = configuration.image
             view.addSubview(imageView)
 
             imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left).isActive = true
-            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: top).isActive = true
-            if withBorder {
-                imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottom).isActive = true
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                               constant: configuration.left).isActive = true
+            imageView.topAnchor.constraint(equalTo: view.topAnchor,
+                                           constant: configuration.top).isActive = true
+            if configuration.withBorder {
+                imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+                                                  constant: -configuration.bottom).isActive = true
             } else {
                 imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             }
 
-            if centerHeader {   // center header or set width to aspect ratio of height
-                imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -left).isActive = true
+            // center header or set width to aspect ratio of height
+            if configuration.centerHeader {
+                imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                    constant: -configuration.left).isActive = true
             } else {
                 let fittingWidth = imageView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).width
                 let fittingHeight = imageView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
                 let aspectRatio = round(fittingWidth/fittingHeight * 10.0) / 10.0
-                let newWidth = withBorder ? height * aspectRatio : (height + bottom) * aspectRatio
+
+                let widthWithBorder = configuration.height * aspectRatio
+                let widthWithoutBorder = (configuration.height + configuration.bottom) * aspectRatio
+                let newWidth = configuration.withBorder ? widthWithBorder : widthWithoutBorder
                 imageView.widthAnchor.constraint(equalToConstant: newWidth).isActive = true
             }
         }
 
-        if withBorder {
+        if configuration.withBorder {
             let bottomLine = UIView()
             bottomLine.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
             bottomLine.alpha = 0.5
@@ -186,7 +174,8 @@ class JESlideMenuTableViewController: UITableViewController {
             view.addSubview(bottomLine)
 
             NSLayoutConstraint.activate([
-                bottomLine.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left),
+                bottomLine.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                    constant: configuration.left),
                 bottomLine.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                 bottomLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 bottomLine.heightAnchor.constraint(equalToConstant: 1.0)
@@ -194,23 +183,28 @@ class JESlideMenuTableViewController: UITableViewController {
         }
 
         // only add text when there's no image
-        if text != nil && image == nil {
+        if !configuration.text.isEmpty && configuration.image == nil {
             let label = UILabel()
-            label.font = UIFont(name: font, size: fontSize)
-            label.text = NSLocalizedString(text!, comment: "")
+            label.font = UIFont(name: configuration.font,
+                                size: configuration.fontSize)
+            label.text = NSLocalizedString(configuration.text, comment: "")
             label.textColor = textColor
             view.addSubview(label)
             label.translatesAutoresizingMaskIntoConstraints = false
 
-            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: left).isActive = true
-            if withBorder {
-                label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottom).isActive = true
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                           constant: configuration.left).isActive = true
+            if configuration.withBorder {
+                label.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+                                              constant: -configuration.bottom).isActive = true
             } else {
                 label.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
             }
-            if centerHeader {   // center headline text
+
+            if configuration.centerHeader {   // center headline text
                 label.textAlignment = .center
-                label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -left).isActive = true
+                label.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                constant: -configuration.left).isActive = true
             }
         }
 

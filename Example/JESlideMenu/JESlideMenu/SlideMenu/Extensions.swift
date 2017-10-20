@@ -9,7 +9,7 @@
 import UIKit
 
 extension JESlideMenuController: JESlideMenuDelegate {
-    
+
     func toggleMenu() {
         var constant: CGFloat = 0.0
         var alpha: CGFloat = 0.0
@@ -30,11 +30,11 @@ extension JESlideMenuController: JESlideMenuDelegate {
                         self.isMenuOpen = !self.isMenuOpen
         })
     }
-    
+
     func setViewControllerAtIndexPath(indexPath: IndexPath) {
         let identifier = menuItems[indexPath.row]
         var newController = UIViewController()
-        
+
         if visibleViewControllerID != identifier {
             // load view controller(s)
             if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
@@ -45,7 +45,7 @@ extension JESlideMenuController: JESlideMenuDelegate {
                 } else {
                     newController = controller
                 }
-                
+
                 newController.title = NSLocalizedString(identifier, comment: "translated title")
                 newController.automaticallyAdjustsScrollViewInsets = true
                 menuNavigationController.setViewControllers([newController], animated: true)
@@ -54,5 +54,26 @@ extension JESlideMenuController: JESlideMenuDelegate {
             }
         }
     }
-    
+
+    // class methods to get the pre-installed fonts
+    static func printInstalledFonts() {
+        let familyNames = UIFont.familyNames
+        var fonts = [String]()
+
+        for family in familyNames {
+            fonts += UIFont.fontNames(forFamilyName: family)
+        }
+        print(fonts)
+    }
+
+    static func printFontNames(familyName: String) {
+        let familyNames = UIFont.familyNames
+        var fonts = [String]()
+        let filteredNames = familyNames.filter({$0.lowercased().contains(familyName.lowercased())})
+        for familyName in filteredNames {
+            fonts += UIFont.fontNames(forFamilyName: familyName)
+        }
+        print(fonts)
+    }
+
 }

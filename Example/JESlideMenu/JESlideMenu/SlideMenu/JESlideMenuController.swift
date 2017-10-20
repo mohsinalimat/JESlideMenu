@@ -48,14 +48,14 @@ class JESlideMenuController: UIViewController {
     @IBInspectable public var titleColor: UIColor?
     @IBInspectable public var barColor: UIColor?
 
-    @IBInspectable public var headerText: String?
+    @IBInspectable public var headerText: String = ""
     @IBInspectable public var headerTextColor: UIColor = UIColor.black
     @IBInspectable public var headerFont: String = "AvenirNextCondensed-Bold"
     @IBInspectable public var headerFontSize: CGFloat = 28.0
     @IBInspectable public var headerBorder: Bool = false
     @IBInspectable public var centerHeader: Bool = false
-    @IBInspectable public var image: UIImage?
-    @IBInspectable public var imageHeight: CGFloat = 30.0
+    @IBInspectable public var headerImage: UIImage?
+    @IBInspectable public var headerHeight: CGFloat = 40.0
 
     @IBInspectable public var iconHeight: CGFloat = 20.0
     @IBInspectable public var iconWidth: CGFloat = 20.0
@@ -160,25 +160,9 @@ class JESlideMenuController: UIViewController {
         // system blue for all buttons by default
         buttonColor = buttonColor == nil ? view.tintColor : buttonColor
 
-        menuTableView = JESlideMenuTableViewController(menuItems: menuItems,
-                                                       iconImages: iconImages,
-                                                       headerText: headerText,
-                                                       headerTextColor: headerTextColor,
-                                                       headerFont: headerFont,
-                                                       headerFontSize: headerFontSize,
-                                                       headerImage: image,
-                                                       headerHeight: imageHeight,
-                                                       headerBorder: headerBorder,
-                                                       cellPadding: paddingTopBottom,
-                                                       cellPaddingLeft: paddingLeft,
-                                                       iconTextGap: iconTextGap,
-                                                       iconHeight: iconHeight,
-                                                       iconWidth: iconWidth,
-                                                       textFontName: textFontName,
-                                                       textSize: textSize,
-                                                       textColor: textColor,
-                                                       backgroundColor: backgroundColor,
-                                                       centerHeader: centerHeader)
+        let menuConfig = createMenuConfiguration(menuItemNames: menuItems, iconImages: iconImages)
+        menuTableView = JESlideMenuTableViewController(configuration: menuConfig)
+
         menuTableView.view.translatesAutoresizingMaskIntoConstraints = false
         self.addChildViewController(menuTableView)
         view.addSubview(menuTableView.view)
@@ -195,6 +179,35 @@ class JESlideMenuController: UIViewController {
             ])
 
         menuTableView.didMove(toParentViewController: self)
+    }
+
+    // configure menu tableView controller
+    private func createMenuConfiguration(menuItemNames: [String],
+                                         iconImages: [UIImage?]) -> MenuConfiguration {
+
+        let menuConfig = MenuConfiguration()
+
+        menuConfig.menuItemNames = menuItemNames
+        menuConfig.iconImages = iconImages
+        menuConfig.headerText = headerText
+        menuConfig.headerTextColor = headerTextColor
+        menuConfig.headerFont = headerFont
+        menuConfig.headerFontSize = headerFontSize
+        menuConfig.headerImage = headerImage
+        menuConfig.headerHeight = headerHeight
+        menuConfig.headerBorder = headerBorder
+        menuConfig.cellPadding = paddingTopBottom
+        menuConfig.cellPaddingLeft = paddingLeft
+        menuConfig.iconTextGap = iconTextGap
+        menuConfig.iconHeight = iconHeight
+        menuConfig.iconWidth = iconWidth
+        menuConfig.textFontName = textFontName
+        menuConfig.textSize = textSize
+        menuConfig.textColor = textColor
+        menuConfig.backgroundColor = backgroundColor
+        menuConfig.centerHeader = centerHeader
+
+        return menuConfig
     }
 
     // access navigationbar
@@ -320,7 +333,8 @@ class JESlideMenuController: UIViewController {
                 self.leadingConstraint.constant = round(edgeLocation.x + difference)
 
                 // min: 0.0 max: 0.5
-                let alpha = round(round(edgeLocation.x + difference) / menuIsOpenConstant * menuIsOpenAlpha * 10.0) / 10.0
+                let alpha = round(round(edgeLocation.x + difference) /
+                    menuIsOpenConstant * menuIsOpenAlpha * 10.0) / 10.0
                 self.tapAreaView.alpha = alpha
             }
         case .ended:
@@ -376,27 +390,6 @@ class JESlideMenuController: UIViewController {
                                  with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         menuNavigationController.willTransition(to: newCollection, with: coordinator)
-    }
-
-    // class methods to get the pre-installed fonts
-    static func printInstalledFonts() {
-        let familyNames = UIFont.familyNames
-        var fonts = [String]()
-
-        for family in familyNames {
-            fonts += UIFont.fontNames(forFamilyName: family)
-        }
-        print(fonts)
-    }
-
-    static func printFontNames(familyName: String) {
-        let familyNames = UIFont.familyNames
-        var fonts = [String]()
-        let filteredNames = familyNames.filter({$0.lowercased().contains(familyName.lowercased())})
-        for familyName in filteredNames {
-            fonts += UIFont.fontNames(forFamilyName: familyName)
-        }
-        print(fonts)
     }
 
 }
