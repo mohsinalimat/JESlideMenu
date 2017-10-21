@@ -32,28 +32,56 @@ extension JESlideMenuController: JESlideMenuDelegate {
     }
 
     func setViewControllerAtIndexPath(indexPath: IndexPath) {
-        let identifier = menuItems[indexPath.row]
-        var newController = UIViewController()
+        let id = menuItems[indexPath.row]
 
-        if visibleViewControllerID != identifier {
-            // load view controller(s)
-            if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
-                if let navi = controller as? UINavigationController {
-                    if let root = navi.topViewController {
-                        newController = root
-                    }
-                } else {
-                    newController = controller
-                }
+        // only load other viewcontrollers
+        if visibleViewControllerID != id {
+            if let newController = viewcontrollerCache.object(forKey: id) {
+                configureViewcontroller(newController, identifier: id)
+            } else if let controller = self.storyboard?.instantiateViewController(withIdentifier: id as String) {
 
-                newController.title = NSLocalizedString(identifier, comment: "translated title")
-                newController.automaticallyAdjustsScrollViewInsets = true
-                menuNavigationController.setViewControllers([newController], animated: true)
-                menuNavigationController.setBarButtonItemWith(image: buttonImage)
-                visibleViewControllerID = identifier
+                // save in cache
+                let cachedController = cacheViewcontroller(controller, forID: id)
+                configureViewcontroller(cachedController, identifier: id)
             }
         }
     }
+
+    private func configureViewcontroller(_ viewcontroller: UIViewController, identifier: NSString) {
+
+        viewcontroller.title = NSLocalizedString(identifier as String, comment: "translated title")
+        viewcontroller.automaticallyAdjustsScrollViewInsets = true
+
+        viewcontroller.view.frame = self.view.bounds
+        menuNavigationController.setViewControllers([viewcontroller], animated: true)
+        menuNavigationController.setBarButtonItemWith(image: buttonImage)
+        visibleViewControllerID = identifier
+    }
+
+    // cache the new viewController and return reference
+    private func cacheViewcontroller(_ viewcontroller: UIViewController,
+                                     forID identifier: NSString) -> UIViewController {
+
+        var newController: UIViewController!
+
+        // get root controller in navigationcontroller
+        if let navigation = viewcontroller as? UINavigationController,
+            let root = navigation.topViewController {
+                newController = root
+        } else {
+            newController = viewcontroller
+        }
+
+        // save in cache
+        viewcontrollerCache.setObject(newController, forKey: identifier)
+
+        return newController
+    }
+
+}
+
+// print installed fonts
+extension JESlideMenuController {
 
     // class methods to get the pre-installed fonts
     static func printInstalledFonts() {

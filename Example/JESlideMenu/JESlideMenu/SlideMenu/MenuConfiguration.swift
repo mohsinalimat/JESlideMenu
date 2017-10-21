@@ -9,7 +9,7 @@
 import UIKit
 
 class MenuConfiguration {
-    var menuItemNames = [String]()
+    var menuItemNames = [NSString]()
     var iconImages = [UIImage?]()
     var headerText: String = ""
     var headerTextColor: UIColor?

@@ -16,21 +16,21 @@ protocol JESlideMenuDelegate: class {
 class JESlideMenuController: UIViewController {
 
     // Menu Items can be set in storyboard or here
-    internal var menuItems: [String]!
+    internal var menuItems: [NSString]!
     private var iconImages: [UIImage?]!
 
     @IBInspectable public var darkMode: Bool = false
     @IBInspectable public var lightStatusBar: Bool = false
-    @IBInspectable public var menuItem1: String!
-    @IBInspectable public var menuItem2: String!
-    @IBInspectable public var menuItem3: String!
-    @IBInspectable public var menuItem4: String!
-    @IBInspectable public var menuItem5: String!
-    @IBInspectable public var menuItem6: String!
-    @IBInspectable public var menuItem7: String!
-    @IBInspectable public var menuItem8: String!
-    @IBInspectable public var menuItem9: String!
-    @IBInspectable public var menuItem10: String!
+    @IBInspectable public var menuItem1: NSString!
+    @IBInspectable public var menuItem2: NSString!
+    @IBInspectable public var menuItem3: NSString!
+    @IBInspectable public var menuItem4: NSString!
+    @IBInspectable public var menuItem5: NSString!
+    @IBInspectable public var menuItem6: NSString!
+    @IBInspectable public var menuItem7: NSString!
+    @IBInspectable public var menuItem8: NSString!
+    @IBInspectable public var menuItem9: NSString!
+    @IBInspectable public var menuItem10: NSString!
 
     @IBInspectable public var iconImage1: UIImage!
     @IBInspectable public var iconImage2: UIImage!
@@ -79,7 +79,8 @@ class JESlideMenuController: UIViewController {
     internal var menuIsOpenAlpha: CGFloat = 0.2
     internal var isMenuOpen = false
 
-    internal var visibleViewControllerID = ""
+    internal var visibleViewControllerID: NSString = ""
+    internal var viewcontrollerCache = NSCache<NSString, UIViewController>()
 
     private var startPoint = CGPoint(x: 0, y: 0)
     private var edgeLocation = CGPoint(x: 0, y: 0)
@@ -109,7 +110,7 @@ class JESlideMenuController: UIViewController {
     // create array for all Storyboard IDs
     private func setupMenuItems() {
         if menuItems == nil {
-            menuItems = [String]()
+            menuItems = [NSString]()
             let items = [menuItem1,
                          menuItem2,
                          menuItem3,
@@ -152,7 +153,7 @@ class JESlideMenuController: UIViewController {
     }
 
     // menu tableViewController added to view and add autolayout
-    private func setupMenuTableViewWithItems(menuItems: [String], iconImages: [UIImage?]) {
+    private func setupMenuTableViewWithItems(menuItems: [NSString], iconImages: [UIImage?]) {
         if darkMode {
             textColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
             backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
@@ -182,7 +183,7 @@ class JESlideMenuController: UIViewController {
     }
 
     // configure menu tableView controller
-    private func createMenuConfiguration(menuItemNames: [String],
+    private func createMenuConfiguration(menuItemNames: [NSString],
                                          iconImages: [UIImage?]) -> MenuConfiguration {
 
         let menuConfig = MenuConfiguration()
@@ -217,7 +218,7 @@ class JESlideMenuController: UIViewController {
             if  let identifier = menuItems.first,
                 let homeController = instantiateViewControllerFromIdentifier(identifier: identifier) {
 
-                homeController.title = NSLocalizedString(identifier, comment: "translated title")
+                homeController.title = NSLocalizedString(identifier as String, comment: "translated title")
                 menuNavigationController = JESlideNavigationController(rootViewController: homeController)
                 menuNavigationController.automaticallyAdjustsScrollViewInsets = true
                 menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -308,12 +309,14 @@ class JESlideMenuController: UIViewController {
     }
 
     // instantiate viewcontroller from storyboard and set the title
-    private func instantiateViewControllerFromIdentifier(identifier: String) -> UIViewController? {
-        if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier) {
+    private func instantiateViewControllerFromIdentifier(identifier: NSString) -> UIViewController? {
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: identifier as String) {
             if let navigation = controller as? UINavigationController,
                 let root = navigation.topViewController {
+                    viewcontrollerCache.setObject(root, forKey: identifier)
                     return root
             }
+            viewcontrollerCache.setObject(controller, forKey: identifier)
             return controller
         }
         return nil

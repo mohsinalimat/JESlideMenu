@@ -11,7 +11,7 @@ import UIKit
 class JESlideMenuTableViewController: UITableViewController {
 
     let identifier = "cell"
-    var menuItems = [String]()
+    var menuItems = [NSString]()
     var iconImages = [UIImage?]()
     var iconHeight: CGFloat!
     var iconWidth: CGFloat!
@@ -26,12 +26,6 @@ class JESlideMenuTableViewController: UITableViewController {
     var iconTextGap: CGFloat = 0.0
 
     weak var menuDelegate: JESlideMenuDelegate?
-
-    init(menuItems: [String], iconImages: [UIImage?]) {
-        super.init(style: .plain)
-        self.menuItems = menuItems
-        self.iconImages = iconImages
-    }
 
     // adjust with logo-image for headerView and height
     init(configuration: MenuConfiguration) {
@@ -110,7 +104,7 @@ class JESlideMenuTableViewController: UITableViewController {
             let size = textSize {
             cell?.label.font = UIFont(name: name, size: size)
         }
-        cell?.label.text = NSLocalizedString(text, comment: "translated menu text")
+        cell?.label.text = NSLocalizedString(text as String, comment: "translated menu text")
         cell?.label.textColor = textColor
         cell?.imageIcon.image = image
         cell?.setNeedsUpdateConstraints()
