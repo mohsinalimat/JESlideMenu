@@ -2,8 +2,8 @@
 //  Extensions.swift
 //  JESlideMenu
 //
-//  Created by JE on 20.10.17.
-//  Copyright © 2017 JE. All rights reserved.
+//  Created by Jasmin Eilers on 20.10.17.
+//  Copyright © 2017 Jasmin Eilers. All rights reserved.
 //
 
 import UIKit
@@ -50,7 +50,6 @@ extension JESlideMenuController: JESlideMenuDelegate {
     private func configureViewcontroller(_ viewcontroller: UIViewController, identifier: NSString) {
 
         viewcontroller.title = NSLocalizedString(identifier as String, comment: "translated title")
-        viewcontroller.automaticallyAdjustsScrollViewInsets = true
 
         viewcontroller.view.frame = self.view.bounds
         menuNavigationController.setViewControllers([viewcontroller], animated: true)

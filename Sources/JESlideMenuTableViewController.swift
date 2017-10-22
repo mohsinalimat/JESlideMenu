@@ -2,30 +2,30 @@
 //  JESlideMenuTableViewController.swift
 //  JESlideMenu
 //
-//  Created by JE on 20.10.17.
-//  Copyright © 2017 JE. All rights reserved.
+//  Created by Jasmin Eilers on 20.10.17.
+//  Copyright © 2017 Jasmin Eilers. All rights reserved.
 //
 
 import UIKit
 
-class JESlideMenuTableViewController: UITableViewController {
+internal class JESlideMenuTableViewController: UITableViewController {
 
-    let identifier = "cell"
-    var menuItems = [NSString]()
-    var iconImages = [UIImage?]()
-    var iconHeight: CGFloat!
-    var iconWidth: CGFloat!
-    var textColor: UIColor!
-    var textFontName: String?
-    var textSize: CGFloat?
-    var backgroundColor: UIColor!
-    let headerTop: CGFloat = 26.0
-    let headerBottom: CGFloat = 10.0
-    var cellPadding: CGFloat = 0.0
-    var cellPaddingLeft: CGFloat = 0.0
-    var iconTextGap: CGFloat = 0.0
+    private let identifier = "cell"
+    private var menuItems = [NSString]()
+    private var iconImages = [UIImage?]()
+    private var iconHeight: CGFloat!
+    private var iconWidth: CGFloat!
+    private var textColor: UIColor!
+    private var textFontName: String?
+    private var textSize: CGFloat?
+    private var backgroundColor: UIColor!
+    private let headerTop: CGFloat = 26.0
+    private let headerBottom: CGFloat = 10.0
+    private var cellPadding: CGFloat = 0.0
+    private var cellPaddingLeft: CGFloat = 0.0
+    private var iconTextGap: CGFloat = 0.0
 
-    weak var menuDelegate: JESlideMenuDelegate?
+    weak var delegate: JESlideMenuDelegate?
 
     // adjust with logo-image for headerView and height
     init(configuration: MenuConfiguration) {
@@ -81,10 +81,6 @@ class JESlideMenuTableViewController: UITableViewController {
         tableView.reloadData()
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItems.count
     }
@@ -114,8 +110,8 @@ class JESlideMenuTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        menuDelegate?.setViewControllerAtIndexPath(indexPath: indexPath)
-        menuDelegate?.toggleMenu()
+        delegate?.setViewControllerAtIndexPath(indexPath: indexPath)
+        delegate?.toggleMenu()
     }
 
     // table header view

@@ -2,8 +2,8 @@
 //  JESlideMenu.swift
 //  JESlideMenu
 //
-//  Created by JE on 02.08.17.
-//  Copyright © 2017 JE. All rights reserved.
+//  Created by Jasmin Eilers on 02.08.17.
+//  Copyright © 2017 Jasmin Eilers. All rights reserved.
 //
 
 import UIKit
@@ -71,7 +71,7 @@ class JESlideMenuController: UIViewController {
     @IBInspectable public var backgroundColor: UIColor = UIColor.clear
 
     internal var menuNavigationController: JESlideNavigationController!
-    internal var menuTableView: JESlideMenuTableViewController!
+    private var menuTableView: JESlideMenuTableViewController!
     internal var tapAreaView: UIView!
 
     internal var leadingConstraint: NSLayoutConstraint!
@@ -169,7 +169,7 @@ class JESlideMenuController: UIViewController {
         view.addSubview(menuTableView.view)
 
         // set delegate for switching viewControllers
-        menuTableView.menuDelegate = self
+        menuTableView.delegate = self
 
         // add fullscreen autolayout
         NSLayoutConstraint.activate([
@@ -220,7 +220,6 @@ class JESlideMenuController: UIViewController {
 
                 homeController.title = NSLocalizedString(identifier as String, comment: "translated title")
                 menuNavigationController = JESlideNavigationController(rootViewController: homeController)
-                menuNavigationController.automaticallyAdjustsScrollViewInsets = true
                 menuNavigationController.view.translatesAutoresizingMaskIntoConstraints = false
                 visibleViewControllerID = identifier
 
@@ -323,7 +322,7 @@ class JESlideMenuController: UIViewController {
     }
 
     // open and close menu
-    @objc func edgePanGestureRecognized(recognizer: UIPanGestureRecognizer) {
+    @objc private func edgePanGestureRecognized(recognizer: UIPanGestureRecognizer) {
         let currentPoint = recognizer.location(in: view)
         switch recognizer.state {
         case .began:
@@ -348,7 +347,7 @@ class JESlideMenuController: UIViewController {
     }
 
     // close menu when it's open
-    @objc func tapGestureRecognized(recognizer: UITapGestureRecognizer) {
+    @objc private func tapGestureRecognized(recognizer: UITapGestureRecognizer) {
 
         switch recognizer.state {
         case .ended:

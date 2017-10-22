@@ -2,18 +2,18 @@
 //  JESlideNavigationController.swift
 //  JESlideMenu
 //
-//  Created by JE on 20.10.17.
-//  Copyright © 2017 JE. All rights reserved.
+//  Created by Jasmin Eilers on 20.10.17.
+//  Copyright © 2017 Jasmin Eilers. All rights reserved.
 //
 
 import UIKit
 
-class JESlideNavigationController: UINavigationController {
+internal class JESlideNavigationController: UINavigationController {
 
     weak var menuDelegate: JESlideMenuDelegate?
-    var toggleButtonColor: UIColor?
-    var barTitleColor: UIColor?
-    var barTintColor: UIColor?
+    internal var toggleButtonColor: UIColor?
+    internal var barTitleColor: UIColor?
+    internal var barTintColor: UIColor?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class JESlideNavigationController: UINavigationController {
         }
     }
 
-    func setBarButtonItemWith(image: UIImage?) {
+    internal func setBarButtonItemWith(image: UIImage?) {
         var buttonImage = UIImage()
         if let img = image {
             buttonImage = img
@@ -50,7 +50,7 @@ class JESlideNavigationController: UINavigationController {
     }
 
     // draw hamburger icon
-    func createHamburgerIconImage() -> UIImage {
+    private func createHamburgerIconImage() -> UIImage {
         var image = UIImage()
 
         // create graphics context

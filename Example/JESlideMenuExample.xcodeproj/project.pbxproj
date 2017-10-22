@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		891451411F9CDC9000EA286A /* JESlideMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8914513E1F9CDBF000EA286A /* JESlideMenu.framework */; };
+		891451421F9CDC9000EA286A /* JESlideMenu.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8914513E1F9CDBF000EA286A /* JESlideMenu.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8925D3591F3A17E600932307 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3581F3A17E600932307 /* AppDelegate.swift */; };
 		8925D35E1F3A17E600932307 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8925D35C1F3A17E600932307 /* Main.storyboard */; };
 		8925D3601F3A17E600932307 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8925D35F1F3A17E600932307 /* Assets.xcassets */; };
@@ -14,17 +16,49 @@
 		8925D3701F3A189100932307 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8925D3721F3A189100932307 /* Localizable.strings */; };
 		8925D3751F3A1DFD00932307 /* SlideTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */; };
 		8925D3771F3A1FAE00932307 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8925D3761F3A1FAE00932307 /* ViewController.swift */; };
-		897F30721F9A69B10039523F /* JESlideMenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30711F9A69B10039523F /* JESlideMenuTableViewController.swift */; };
-		897F30741F9A6A0B0039523F /* JESlideMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30731F9A6A0A0039523F /* JESlideMenuController.swift */; };
-		897F30761F9A6AC60039523F /* JESlideNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30751F9A6AC60039523F /* JESlideNavigationController.swift */; };
-		897F30781F9A6B0F0039523F /* JESlideMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30771F9A6B0F0039523F /* JESlideMenuTableViewCell.swift */; };
-		897F307A1F9A6F3F0039523F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F30791F9A6F3F0039523F /* Extensions.swift */; };
-		897F307C1F9A73060039523F /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F307B1F9A73060039523F /* MenuConfiguration.swift */; };
-		897F30801F9A798E0039523F /* HeaderConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F307F1F9A798E0039523F /* HeaderConfiguration.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8914513D1F9CDBF000EA286A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 891451381F9CDBF000EA286A /* JESlideMenu.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8920FEF91F9CC278001515A5;
+			remoteInfo = JESlideMenu;
+		};
+		8914513F1F9CDBF000EA286A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 891451381F9CDBF000EA286A /* JESlideMenu.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8920FF021F9CC278001515A5;
+			remoteInfo = JESlideMenuTests;
+		};
+		891451431F9CDC9000EA286A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 891451381F9CDBF000EA286A /* JESlideMenu.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8920FEF81F9CC278001515A5;
+			remoteInfo = JESlideMenu;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		891451451F9CDC9000EA286A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				891451421F9CDC9000EA286A /* JESlideMenu.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		8925D3551F3A17E600932307 /* JESlideMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JESlideMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		891451381F9CDBF000EA286A /* JESlideMenu.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JESlideMenu.xcodeproj; path = ../JESlideMenu.xcodeproj; sourceTree = "<group>"; };
+		8925D3551F3A17E600932307 /* JESlideMenuExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JESlideMenuExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8925D3581F3A17E600932307 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8925D35D1F3A17E600932307 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8925D35F1F3A17E600932307 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -36,13 +70,6 @@
 		8925D3731F3A189400932307 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideTableViewController.swift; sourceTree = "<group>"; };
 		8925D3761F3A1FAE00932307 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		897F30711F9A69B10039523F /* JESlideMenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideMenuTableViewController.swift; sourceTree = "<group>"; };
-		897F30731F9A6A0A0039523F /* JESlideMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideMenuController.swift; sourceTree = "<group>"; };
-		897F30751F9A6AC60039523F /* JESlideNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideNavigationController.swift; sourceTree = "<group>"; };
-		897F30771F9A6B0F0039523F /* JESlideMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideMenuTableViewCell.swift; sourceTree = "<group>"; };
-		897F30791F9A6F3F0039523F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		897F307B1F9A73060039523F /* MenuConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfiguration.swift; sourceTree = "<group>"; };
-		897F307F1F9A798E0039523F /* HeaderConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderConfiguration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,16 +77,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				891451411F9CDC9000EA286A /* JESlideMenu.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		891451391F9CDBF000EA286A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8914513E1F9CDBF000EA286A /* JESlideMenu.framework */,
+				891451401F9CDBF000EA286A /* JESlideMenuTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		8925D34C1F3A17E600932307 = {
 			isa = PBXGroup;
 			children = (
-				8925D3571F3A17E600932307 /* JESlideMenu */,
+				891451381F9CDBF000EA286A /* JESlideMenu.xcodeproj */,
+				8925D3571F3A17E600932307 /* JESlideMenuExample */,
 				8925D3561F3A17E600932307 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -67,60 +105,47 @@
 		8925D3561F3A17E600932307 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8925D3551F3A17E600932307 /* JESlideMenu.app */,
+				8925D3551F3A17E600932307 /* JESlideMenuExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8925D3571F3A17E600932307 /* JESlideMenu */ = {
+		8925D3571F3A17E600932307 /* JESlideMenuExample */ = {
 			isa = PBXGroup;
 			children = (
 				8925D3581F3A17E600932307 /* AppDelegate.swift */,
-				897F306F1F9A692B0039523F /* SlideMenu */,
-				8925D35C1F3A17E600932307 /* Main.storyboard */,
 				8925D3761F3A1FAE00932307 /* ViewController.swift */,
 				8925D3741F3A1DFD00932307 /* SlideTableViewController.swift */,
+				8925D35C1F3A17E600932307 /* Main.storyboard */,
 				8925D3721F3A189100932307 /* Localizable.strings */,
 				8925D35F1F3A17E600932307 /* Assets.xcassets */,
 				8925D3611F3A17E600932307 /* LaunchScreen.storyboard */,
 				8925D3641F3A17E600932307 /* Info.plist */,
 			);
-			path = JESlideMenu;
-			sourceTree = "<group>";
-		};
-		897F306F1F9A692B0039523F /* SlideMenu */ = {
-			isa = PBXGroup;
-			children = (
-				897F30731F9A6A0A0039523F /* JESlideMenuController.swift */,
-				897F30711F9A69B10039523F /* JESlideMenuTableViewController.swift */,
-				897F30751F9A6AC60039523F /* JESlideNavigationController.swift */,
-				897F30771F9A6B0F0039523F /* JESlideMenuTableViewCell.swift */,
-				897F307B1F9A73060039523F /* MenuConfiguration.swift */,
-				897F307F1F9A798E0039523F /* HeaderConfiguration.swift */,
-				897F30791F9A6F3F0039523F /* Extensions.swift */,
-			);
-			path = SlideMenu;
+			path = JESlideMenuExample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8925D3541F3A17E600932307 /* JESlideMenu */ = {
+		8925D3541F3A17E600932307 /* JESlideMenuExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8925D3671F3A17E600932307 /* Build configuration list for PBXNativeTarget "JESlideMenu" */;
+			buildConfigurationList = 8925D3671F3A17E600932307 /* Build configuration list for PBXNativeTarget "JESlideMenuExample" */;
 			buildPhases = (
 				8925D3511F3A17E600932307 /* Sources */,
 				8925D3521F3A17E600932307 /* Frameworks */,
 				8925D3531F3A17E600932307 /* Resources */,
 				89235A4C1F9A8792001F3472 /* ShellScript */,
+				891451451F9CDC9000EA286A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				891451441F9CDC9000EA286A /* PBXTargetDependency */,
 			);
-			name = JESlideMenu;
+			name = JESlideMenuExample;
 			productName = JESlideMenu;
-			productReference = 8925D3551F3A17E600932307 /* JESlideMenu.app */;
+			productReference = 8925D3551F3A17E600932307 /* JESlideMenuExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -140,7 +165,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8925D3501F3A17E600932307 /* Build configuration list for PBXProject "JESlideMenu" */;
+			buildConfigurationList = 8925D3501F3A17E600932307 /* Build configuration list for PBXProject "JESlideMenuExample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -152,12 +177,35 @@
 			mainGroup = 8925D34C1F3A17E600932307;
 			productRefGroup = 8925D3561F3A17E600932307 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 891451391F9CDBF000EA286A /* Products */;
+					ProjectRef = 891451381F9CDBF000EA286A /* JESlideMenu.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
-				8925D3541F3A17E600932307 /* JESlideMenu */,
+				8925D3541F3A17E600932307 /* JESlideMenuExample */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		8914513E1F9CDBF000EA286A /* JESlideMenu.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JESlideMenu.framework;
+			remoteRef = 8914513D1F9CDBF000EA286A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		891451401F9CDBF000EA286A /* JESlideMenuTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = JESlideMenuTests.xctest;
+			remoteRef = 8914513F1F9CDBF000EA286A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8925D3531F3A17E600932307 /* Resources */ = {
@@ -194,20 +242,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				897F30761F9A6AC60039523F /* JESlideNavigationController.swift in Sources */,
 				8925D3751F3A1DFD00932307 /* SlideTableViewController.swift in Sources */,
 				8925D3771F3A1FAE00932307 /* ViewController.swift in Sources */,
-				897F307A1F9A6F3F0039523F /* Extensions.swift in Sources */,
-				897F307C1F9A73060039523F /* MenuConfiguration.swift in Sources */,
-				897F30741F9A6A0B0039523F /* JESlideMenuController.swift in Sources */,
 				8925D3591F3A17E600932307 /* AppDelegate.swift in Sources */,
-				897F30801F9A798E0039523F /* HeaderConfiguration.swift in Sources */,
-				897F30781F9A6B0F0039523F /* JESlideMenuTableViewCell.swift in Sources */,
-				897F30721F9A69B10039523F /* JESlideMenuTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		891451441F9CDC9000EA286A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = JESlideMenu;
+			targetProxy = 891451431F9CDC9000EA286A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		8925D35C1F3A17E600932307 /* Main.storyboard */ = {
@@ -352,14 +401,15 @@
 		8925D3681F3A17E600932307 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = JESlideMenu/Info.plist;
+				INFOPLIST_FILE = JESlideMenuExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.je.JESlideMenu;
+				PRODUCT_BUNDLE_IDENTIFIER = de.je.JESlideMenuExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -370,14 +420,15 @@
 		8925D3691F3A17E600932307 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = JESlideMenu/Info.plist;
+				INFOPLIST_FILE = JESlideMenuExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.je.JESlideMenu;
+				PRODUCT_BUNDLE_IDENTIFIER = de.je.JESlideMenuExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -388,7 +439,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8925D3501F3A17E600932307 /* Build configuration list for PBXProject "JESlideMenu" */ = {
+		8925D3501F3A17E600932307 /* Build configuration list for PBXProject "JESlideMenuExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8925D3651F3A17E600932307 /* Debug */,
@@ -397,7 +448,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8925D3671F3A17E600932307 /* Build configuration list for PBXNativeTarget "JESlideMenu" */ = {
+		8925D3671F3A17E600932307 /* Build configuration list for PBXNativeTarget "JESlideMenuExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8925D3681F3A17E600932307 /* Debug */,

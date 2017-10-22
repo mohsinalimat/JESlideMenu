@@ -2,22 +2,22 @@
 //  JESlideMenuTableViewCell.swift
 //  JESlideMenu
 //
-//  Created by JE on 20.10.17.
-//  Copyright © 2017 JE. All rights reserved.
+//  Created by Jasmin Eilers on 20.10.17.
+//  Copyright © 2017 Jasmin Eilers. All rights reserved.
 //
 
 import UIKit
 
-class JESlideMenuTableViewCell: UITableViewCell {
+internal class JESlideMenuTableViewCell: UITableViewCell {
 
-    var label = UILabel()
-    var imageIcon = UIImageView()
-    var imageHeight: CGFloat = 0.0
-    var imageWidth: CGFloat = 0.0
-    var didSetupConstraints = false
-    var cellPadding: CGFloat = 0.0
-    var cellPaddingLeft: CGFloat = 0.0
-    var iconTextGap: CGFloat = 0.0
+    internal var label = UILabel()
+    internal var imageIcon = UIImageView()
+    private var imageHeight: CGFloat = 0.0
+    private var imageWidth: CGFloat = 0.0
+    private var didSetupConstraints = false
+    private var cellPadding: CGFloat = 0.0
+    private var cellPaddingLeft: CGFloat = 0.0
+    private var iconTextGap: CGFloat = 0.0
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,12 +36,12 @@ class JESlideMenuTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setIcon(height: CGFloat, andWidth: CGFloat) {
+    internal func setIcon(height: CGFloat, andWidth: CGFloat) {
         imageHeight = height
         imageWidth = andWidth
     }
 
-    func setCell(padding: CGFloat, leftPadding: CGFloat, andIconGap: CGFloat) {
+    internal func setCell(padding: CGFloat, leftPadding: CGFloat, andIconGap: CGFloat) {
         cellPaddingLeft = leftPadding
         cellPadding = padding
         iconTextGap = andIconGap

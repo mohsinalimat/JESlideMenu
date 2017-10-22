@@ -17,7 +17,7 @@
         <!--Slide Menu Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="alt" id="BYZ-38-t0r" customClass="JESlideMenuController" customModule="JESlideMenu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="alt" id="BYZ-38-t0r" customClass="JESlideMenuController" customModule="JESlideMenu" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -85,7 +85,7 @@
         <!--Root View Controller-->
         <scene sceneID="wmf-XT-NWk">
             <objects>
-                <tableViewController id="3oL-CK-sae" customClass="SlideTableViewController" customModule="JESlideMenu" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="3oL-CK-sae" customClass="SlideTableViewController" customModule="JESlideMenuExample" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="unW-Ba-uhw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -119,7 +119,7 @@
         <!--View Controller-->
         <scene sceneID="aPJ-rA-GSp">
             <objects>
-                <viewController id="ZUd-bP-CX5" customClass="ViewController" customModule="JESlideMenu" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ZUd-bP-CX5" customClass="ViewController" customModule="JESlideMenuExample" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TfN-fa-CD4"/>
                         <viewControllerLayoutGuide type="bottom" id="eVs-KP-42a"/>
