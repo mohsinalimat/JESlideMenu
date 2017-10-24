@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		8920FF031F9CC278001515A5 /* JESlideMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8920FEF91F9CC278001515A5 /* JESlideMenu.framework */; };
 		8920FF081F9CC278001515A5 /* JESlideMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8920FF071F9CC278001515A5 /* JESlideMenuTests.swift */; };
-		8920FF0A1F9CC278001515A5 /* JESlideMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = 8920FEFC1F9CC278001515A5 /* JESlideMenu.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8920FF1A1F9CC9EA001515A5 /* JESlideMenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8920FF131F9CC9E9001515A5 /* JESlideMenuTableViewController.swift */; };
 		8920FF1B1F9CC9EA001515A5 /* JESlideMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8920FF141F9CC9E9001515A5 /* JESlideMenuTableViewCell.swift */; };
 		8920FF1C1F9CC9EA001515A5 /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8920FF151F9CC9EA001515A5 /* MenuConfiguration.swift */; };
@@ -31,7 +30,6 @@
 
 /* Begin PBXFileReference section */
 		8920FEF91F9CC278001515A5 /* JESlideMenu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JESlideMenu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8920FEFC1F9CC278001515A5 /* JESlideMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JESlideMenu.h; sourceTree = "<group>"; };
 		8920FEFD1F9CC278001515A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8920FF021F9CC278001515A5 /* JESlideMenuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JESlideMenuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8920FF071F9CC278001515A5 /* JESlideMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JESlideMenuTests.swift; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 		8920FEFB1F9CC278001515A5 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				8920FEFC1F9CC278001515A5 /* JESlideMenu.h */,
 				8920FF191F9CC9EA001515A5 /* JESlideMenuController.swift */,
 				8920FF131F9CC9E9001515A5 /* JESlideMenuTableViewController.swift */,
 				8920FF181F9CC9EA001515A5 /* JESlideNavigationController.swift */,
@@ -114,7 +111,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8920FF0A1F9CC278001515A5 /* JESlideMenu.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
